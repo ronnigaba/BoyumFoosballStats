@@ -1,0 +1,58 @@
+﻿@page "/Dashboard"
+<h3>Dashboard</h3>
+
+<div class="container">
+    <div class="row">
+        @if (PlayerWinrates != null && PlayerWinrates.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@PlayerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by player(%)" LineType="LineType.Dashed" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" Step="5" />
+                </RadzenChart>
+            </div>
+        }
+        @if (PlayerMatchesPlayed != null && PlayerMatchesPlayed.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@PlayerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" LineType="LineType.Dashed" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" />
+                </RadzenChart>
+            </div>
+        }
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        @if (TableSideWinRates != null && TableSideWinRates.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenPieSeries  Data="@TableSideWinRates" Title="Win rate by side(%)" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                </RadzenChart>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    public List<Match> Matches = new List<Match>();
+    private AzureBlobStorageHelper blobHelper;
+    private IOrderedEnumerable<KeyValuePair<string, double>> PlayerWinrates;
+    private IOrderedEnumerable<KeyValuePair<string, int>> PlayerMatchesPlayed;
+    private Dictionary<string, double> TableSideWinRates;
+
+    protected override async Task OnInitializedAsync()
+    {
+        blobHelper = new AzureBlobStorageHelper();
+        var analysisHelper = new MatchAnalysisHelper();
+        Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
+        PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches);
+        TableSideWinRates = analysisHelper.CalculateWinRatesForTableSides(Matches);
+        PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches);
+    }
+}

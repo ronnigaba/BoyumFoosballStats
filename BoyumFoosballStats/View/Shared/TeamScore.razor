@@ -1,0 +1,53 @@
+﻿@using BoyumFoosballStats.Model.Enums
+@if (Team != null)
+{
+    <p>@GetTeamName()</p>
+    <InputSelect @bind-Value="Team.Attacker">
+        <option value="">Attacker</option>
+        @foreach (var player in Enum.GetValues(typeof(Player)))
+        {
+        <option value="@player">@player</option>
+        }
+</InputSelect>
+    <InputSelect @bind-Value="Team.Defender">
+        <option value="">Defender</option>
+        @foreach (var player in Enum.GetValues(typeof(Player)))
+        {
+        <option value="@player">@player</option>
+        }
+</InputSelect>
+}
+<p>Score</p>
+<InputNumber @bind-Value="InternalScore" />
+
+@code
+{
+    private string GetTeamName()
+    {
+        return Team?.Side == null ? string.Empty : Enum.GetName(Team.Side);
+    }
+
+    private int InternalScore
+    {
+        get => Score;
+        set
+        {
+            if (value != Score)
+            {
+                ScoreChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public Team? Team { get; set; }
+
+    [Parameter]
+    public int Score { get; set; }
+
+    [Parameter]
+    public EventCallback<Team> TeamChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ScoreChanged { get; set; }
+}

@@ -1,0 +1,14 @@
+﻿@page "/"
+@inject IScoreInputViewModel _scoreInput
+
+<h3>Score input</h3>
+<br />
+<EditForm Model="_scoreInput.Match" OnValidSubmit="@_scoreInput.SaveScores">
+    <DataAnnotationsValidator />
+    <TeamScore @bind-Team="_scoreInput.Match.Black" @bind-Score="_scoreInput.Match.ScoreBlack" @bind-Score:event="ScoreChanged"></TeamScore>
+    <br/>
+    <TeamScore @bind-Team="_scoreInput.Match.Gray" @bind-Score="_scoreInput.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
+    <br/>
+    <button type="submit">Save score</button>
+    <ValidationSummary />
+</EditForm>

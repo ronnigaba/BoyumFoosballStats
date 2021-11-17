@@ -9,6 +9,6 @@
     <br/>
     <TeamScore @bind-Team="_scoreInput.Match.Gray" @bind-Score="_scoreInput.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
     <br/>
-    <button type="submit">Save score</button>
+    <button disabled="@_scoreInput.SavingData" type="submit">Save score</button>
     <ValidationSummary />
 </EditForm>

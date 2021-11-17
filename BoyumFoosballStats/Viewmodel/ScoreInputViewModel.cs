@@ -7,9 +7,11 @@ namespace BoyumFoosballStats.Viewmodel
     public class ScoreInputViewModel : IScoreInputViewModel
     {
         public Match Match { get; set; } = new Match();
+        public bool SavingData { get; set; }
 
         public async Task SaveScores()
         {
+            SavingData = true;
             if (Match.IsValid())
             {
                 Match.MatchDate = DateTime.Now;
@@ -18,6 +20,7 @@ namespace BoyumFoosballStats.Viewmodel
                 await azureBlobHelper.UploadMatches(matches, AzureBlobStorageHelper.DefaultFileName);
                 await Reset();
             }
+            SavingData = false;
         }
 
         public async Task Reset()
@@ -32,6 +35,7 @@ namespace BoyumFoosballStats.Viewmodel
     public interface IScoreInputViewModel
     {
         Match Match { get; set; }
+        bool SavingData { get; set; }
         Task SaveScores();
 
         Task Reset();

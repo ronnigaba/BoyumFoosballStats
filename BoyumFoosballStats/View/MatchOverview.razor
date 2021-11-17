@@ -1,10 +1,9 @@
 ﻿@page "/MatchOverview"
 @inject IJSRuntime jsRuntime
-<h3>Matches</h3>
-
 @if (@Matches.Any())
 {
-    <RadzenDataGrid PageSize="10" AllowPaging="true" Data="@Matches" CellRender="@CellRender" @ref="dataGrid">
+    <h1>Data based on @Matches.Count matches</h1>
+    <RadzenDataGrid PageSize="10" AllowPaging="true" Data="@Matches.OrderByDescending(x=>x.MatchDate)" CellRender="@CellRender" @ref="dataGrid">
         <Columns>
             <RadzenDataGridColumn TItem="Match" Property="Black.Attacker" Title="Attacker black" TextAlign="TextAlign.Left" />
             <RadzenDataGridColumn TItem="Match" Property="Black.Defender" Title="Defender black" TextAlign="TextAlign.Left" />
@@ -38,7 +37,7 @@
         blobHelper = new AzureBlobStorageHelper();
         Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
     }
-    
+
     void CellRender(DataGridCellRenderEventArgs<Match> args)
     {
         var backgroundColor = "background-color:";
@@ -61,7 +60,7 @@
             return;
         }
         Matches.RemoveAll(x => x.Id == id);
-        await blobHelper.UploadMatches(Matches, AzureBlobStorageHelper.DefaultFileName, true);
+        await blobHelper.RemoveEntry(id);
         await dataGrid.Reload();
     }
 

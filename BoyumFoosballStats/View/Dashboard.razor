@@ -1,13 +1,21 @@
 ﻿@page "/Dashboard"
 <h3>Dashboard</h3>
-
+@if (Matches != null && Matches.Any())
+{
+    <p>Data based on @Matches.Count matches</p>
+}
 <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <RadzenDropDown TValue="PlayerPosition?" Placeholder="Filter by position" AllowClear="true" Data="@WinRateFilterOptions" Change="@CalculateWinRates"></RadzenDropDown>
+        </div>
+    </div>
     <div class="row">
         @if (PlayerWinrates != null && PlayerWinrates.Any())
         {
             <div class="col-6">
                 <RadzenChart>
-                    <RadzenBarSeries Data="@PlayerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by player(%)" LineType="LineType.Dashed" />
+                    <RadzenBarSeries Data="@PlayerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" Step="5" />
                 </RadzenChart>
@@ -17,7 +25,7 @@
         {
             <div class="col-6">
                 <RadzenChart>
-                    <RadzenBarSeries Data="@PlayerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" LineType="LineType.Dashed" />
+                    <RadzenBarSeries Data="@PlayerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" />
                 </RadzenChart>
@@ -26,12 +34,12 @@
     </div>
 </div>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         @if (TableSideWinRates != null && TableSideWinRates.Any())
         {
             <div class="col-6">
                 <RadzenChart>
-                    <RadzenPieSeries  Data="@TableSideWinRates" Title="Win rate by side(%)" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenPieSeries Data="@TableSideWinRates" Title="Win rate by side(%)" CategoryProperty="Key" ValueProperty="Value" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                 </RadzenChart>
             </div>
@@ -42,17 +50,29 @@
 @code {
     public List<Match> Matches = new List<Match>();
     private AzureBlobStorageHelper blobHelper;
+    private MatchAnalysisHelper analysisHelper;
+    
     private IOrderedEnumerable<KeyValuePair<string, double>> PlayerWinrates;
     private IOrderedEnumerable<KeyValuePair<string, int>> PlayerMatchesPlayed;
     private Dictionary<string, double> TableSideWinRates;
 
+    private List<PlayerPosition?> WinRateFilterOptions { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        WinRateFilterOptions = new List<PlayerPosition?> { PlayerPosition.Attacker, PlayerPosition.Defender, null };
+        analysisHelper = new MatchAnalysisHelper();
         blobHelper = new AzureBlobStorageHelper();
-        var analysisHelper = new MatchAnalysisHelper();
         Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
         PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches);
         TableSideWinRates = analysisHelper.CalculateWinRatesForTableSides(Matches);
         PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches);
+    }
+
+    private void CalculateWinRates(object value)
+    {
+        var positionFilter = value as PlayerPosition?;
+        PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches, positionFilter);
+        PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches, positionFilter);
     }
 }

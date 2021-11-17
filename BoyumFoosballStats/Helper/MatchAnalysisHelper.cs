@@ -6,20 +6,40 @@ namespace BoyumFoosballStats.Helper
 {
     public class MatchAnalysisHelper
     {
-        public bool DidPlayerParticipateInAnyGames(List<Match> matches, Player player)
+        public bool DidPlayerParticipateInAnyGames(List<Match> matches, Player player, PlayerPosition? position = null)
         {
             return CalculateMatchesPlayed(matches, player) > 0;
         }
 
-        public double CalculateWinRate(List<Match> matches, Player player)
+        public double CalculateWinRate(List<Match> matches, Player player, PlayerPosition? position = null)
         {
-            var wins = matches.Count(x => x.WinningTeam.Players.Contains(player));
+            int wins;
+            switch (position)
+            {
+                case PlayerPosition.Attacker:
+                    wins = matches.Count(x => x.WinningTeam.Attacker == player);
+                    break;
+                case PlayerPosition.Defender:
+                    wins = matches.Count(x => x.WinningTeam.Defender == player);
+                    break;
+                default:
+                    wins = matches.Count(x => x.WinningTeam.Players.Contains(player));
+                    break;
+            }
             return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player) * 100);
         }
 
-        public int CalculateMatchesPlayed(List<Match> matches, Player player)
+        public int CalculateMatchesPlayed(List<Match> matches, Player player, PlayerPosition? position = null)
         {
-            return matches.Count(x => x.Black.Players.Contains(player) || x.Gray.Players.Contains(player));
+            switch (position)
+            {
+                case PlayerPosition.Attacker:
+                    return matches.Count(x => x.Black.Attacker == player || x.Gray.Attacker == player);
+                case PlayerPosition.Defender:
+                    return matches.Count(x => x.Black.Defender == player || x.Gray.Defender == player);
+                default:
+                    return matches.Count(x => x.Black.Players.Contains(player) || x.Gray.Players.Contains(player));
+            }
         }
 
         public double CalculateWinRateTeam(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
@@ -30,35 +50,33 @@ namespace BoyumFoosballStats.Helper
 
         public int CalculateMatchesPlayedTeam(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
         {
-            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender) 
+            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender)
                                       || x.Gray.Players.Contains(attacker) && x.Gray.Players.Contains(defender));
         }
 
-        public IOrderedEnumerable<KeyValuePair<string, double>> CalculateWinRatesForAllPlayers(List<Match> matches)
+        public IOrderedEnumerable<KeyValuePair<string, double>> CalculateWinRatesForAllPlayers(List<Match> matches, PlayerPosition? position = null)
         {
             var result = new Dictionary<string, double>();
 
             foreach (var player in (Player[])Enum.GetValues(typeof(Player)))
             {
                 var playerName = Enum.GetName(player);
-                if (playerName != null && DidPlayerParticipateInAnyGames(matches, player))
+                if (playerName != null && DidPlayerParticipateInAnyGames(matches, player, position))
                 {
-                    result.Add(playerName, CalculateWinRate(matches, player));
+                    result.Add(playerName, CalculateWinRate(matches, player, position));
                 }
             }
             return result.OrderBy(x => x.Value);
         }
 
-
-
-        public IOrderedEnumerable<KeyValuePair<string, int>> CalculateMatchesPlayedForAllPlayers(List<Match> matches)
+        public IOrderedEnumerable<KeyValuePair<string, int>> CalculateMatchesPlayedForAllPlayers(List<Match> matches, PlayerPosition? position = null)
         {
             var result = new Dictionary<string, int>();
 
             foreach (var player in (Player[])Enum.GetValues(typeof(Player)))
             {
                 var playerName = Enum.GetName(player);
-                var matchesPlayed = CalculateMatchesPlayed(matches, player);
+                var matchesPlayed = CalculateMatchesPlayed(matches, player, position);
                 if (playerName != null && matchesPlayed > 0)
                 {
                     result.Add(playerName, matchesPlayed);

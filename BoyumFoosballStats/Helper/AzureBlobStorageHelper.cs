@@ -54,6 +54,14 @@ namespace BoyumFoosballStats.Helper
 
         }
 
+        public async Task<List<Match>> RemoveEntry(string id)
+        {
+            var matches = await GetMatches(DefaultFileName);
+            matches.RemoveAll(x => x.Id == id);
+            await UploadMatches(matches, DefaultFileName, true);
+            return matches;
+        }
+
         private BlobClient GetBlobClient(string containerName, string fileName)
         {
             BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);

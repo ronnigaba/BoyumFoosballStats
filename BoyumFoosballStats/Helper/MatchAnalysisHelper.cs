@@ -8,7 +8,7 @@ namespace BoyumFoosballStats.Helper
     {
         public bool DidPlayerParticipateInAnyGames(List<Match> matches, Player player, PlayerPosition? position = null)
         {
-            return CalculateMatchesPlayed(matches, player) > 0;
+            return CalculateMatchesPlayed(matches, player, position) > 0;
         }
 
         public double CalculateWinRate(List<Match> matches, Player player, PlayerPosition? position = null)
@@ -26,7 +26,7 @@ namespace BoyumFoosballStats.Helper
                     wins = matches.Count(x => x.WinningTeam.Players.Contains(player));
                     break;
             }
-            return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player) * 100);
+            return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player, position) * 100);
         }
 
         public int CalculateMatchesPlayed(List<Match> matches, Player player, PlayerPosition? position = null)

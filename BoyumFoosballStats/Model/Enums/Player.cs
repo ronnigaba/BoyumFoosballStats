@@ -10,6 +10,7 @@
         Kincső = 5,
         Jacob = 6,
         Henrik = 7,
-        Kim = 8
+        Kim = 8,
+        Maria = 9
     }
 }

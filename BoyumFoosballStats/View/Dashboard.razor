@@ -39,11 +39,21 @@
         {
             <div class="col-6">
                 <RadzenChart>
-                    <RadzenPieSeries Data="@TableSideWinRates" Title="Win rate by side(%)" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenPieSeries Data="@TableSideWinRates" Title="Win rate (%)" CategoryProperty="Key" ValueProperty="Value" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                 </RadzenChart>
             </div>
         }
+@*        @if (TeamWinrates != null && TeamWinrates.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@TeamWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" Step="5" />
+                </RadzenChart>
+            </div>
+        }*@
     </div>
 </div>
 
@@ -53,6 +63,7 @@
     private MatchAnalysisHelper analysisHelper;
     
     private IOrderedEnumerable<KeyValuePair<string, double>> PlayerWinrates;
+    private IOrderedEnumerable<KeyValuePair<string, double>> TeamWinrates;
     private IOrderedEnumerable<KeyValuePair<string, int>> PlayerMatchesPlayed;
     private Dictionary<string, double> TableSideWinRates;
 
@@ -65,8 +76,10 @@
         blobHelper = new AzureBlobStorageHelper();
         Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
         PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches);
+        //TeamWinrates = analysisHelper.CalculateWinRatesForAllTeams(Matches);
         TableSideWinRates = analysisHelper.CalculateWinRatesForTableSides(Matches);
         PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches);
+
     }
 
     private void CalculateWinRates(object value)

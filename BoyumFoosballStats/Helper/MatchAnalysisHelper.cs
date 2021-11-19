@@ -42,16 +42,42 @@ namespace BoyumFoosballStats.Helper
             }
         }
 
+        public int CalculateMatchesPlayed(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
+        {
+            if (!ignorePosition)
+            {
+                return matches.Count(x => x.Black.Attacker == attacker && x.Black.Defender == defender
+                                          || x.Gray.Attacker == attacker && x.Gray.Defender == defender);
+            }
+            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender) 
+                                      || x.Gray.Players.Contains(attacker) && x.Gray.Players.Contains(defender));
+        }
+
         public double CalculateWinRateTeam(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
         {
             var wins = matches.Count(x => x.WinningTeam.Players.Contains(attacker) && x.WinningTeam.Players.Contains(defender));
-            return Math.Round(wins / (float)CalculateMatchesPlayedTeam(matches, attacker, defender, ignorePosition) * 100);
+            return Math.Round(wins / (float)CalculateMatchesPlayed(matches, attacker, defender, ignorePosition) * 100);
         }
 
-        public int CalculateMatchesPlayedTeam(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
+        public IOrderedEnumerable<KeyValuePair<string, double>> CalculateWinRatesForAllTeams(List<Match> matches, bool ignorePositions = true)
         {
-            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender)
-                                      || x.Gray.Players.Contains(attacker) && x.Gray.Players.Contains(defender));
+            var result = new Dictionary<string, double>();
+            var values = Enum.GetValues(typeof(Player)).Cast<Player>();
+            var combinations = CollectionCombinationHelper.GetCombinations<Player>(values, 2);
+            var test = combinations.ToList();
+            foreach (var l in test)
+            {
+                var p = l.ToList();
+                var attacker = p[0];
+                var defender = p[1];
+                var count = CalculateMatchesPlayed(matches, attacker, defender, ignorePositions);
+                Console.WriteLine($"{attacker}/{defender}  " + count);
+                if (count > 0)
+                {
+                    result.Add($"{attacker}/{defender}", CalculateWinRateTeam(matches, attacker, defender, ignorePositions));
+                }
+            }
+            return result.OrderBy(x => x.Value);
         }
 
         public IOrderedEnumerable<KeyValuePair<string, double>> CalculateWinRatesForAllPlayers(List<Match> matches, PlayerPosition? position = null)

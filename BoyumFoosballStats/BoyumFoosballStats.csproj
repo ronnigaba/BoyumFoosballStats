@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Radzen.Blazor" Version="3.12.2" />
+    <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
   </ItemGroup>
 
 </Project>

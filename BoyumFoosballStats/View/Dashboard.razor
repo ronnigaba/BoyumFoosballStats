@@ -13,7 +13,7 @@
     <div class="row">
         @if (PlayerWinrates != null && PlayerWinrates.Any())
         {
-            <div class="col-6">
+            <div class="col-sm-12 col-md-6">
                 <RadzenChart>
                     <RadzenBarSeries Data="@PlayerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
@@ -23,7 +23,7 @@
         }
         @if (PlayerMatchesPlayed != null && PlayerMatchesPlayed.Any())
         {
-            <div class="col-6">
+            <div class="col-sm-12 col-md-6">
                 <RadzenChart>
                     <RadzenBarSeries Data="@PlayerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" />
                     <RadzenLegend Position="LegendPosition.Bottom" />

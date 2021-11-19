@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using BoyumFoosballStats.Model;
+﻿using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
 
 namespace BoyumFoosballStats.Helper
@@ -126,6 +125,11 @@ namespace BoyumFoosballStats.Helper
             }
 
             return result;
+        }
+
+        public IEnumerable<IGrouping<int, Match>> SortMatchesByWeek(List<Match> matches)
+        {
+            return matches.GroupBy(x => DateHelper.GetCurrentWeekByDate(x.MatchDate));
         }
     }
 }

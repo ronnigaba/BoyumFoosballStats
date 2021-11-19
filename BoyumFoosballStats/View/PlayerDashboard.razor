@@ -1,0 +1,42 @@
+﻿@page "/PlayerDashboard"
+@inject IPlayerDashboardViewModel _viewModel
+
+<h3>Player stats</h3>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <RadzenDropDown TValue="Player" Placeholder="Filter by player" Data="@_viewModel.PlayerFilterOption" Change="@_viewModel.CalculateWeeklyStats"></RadzenDropDown>
+        </div>
+    </div>
+    <div class="row">
+        @if (_viewModel.WeeklyWinRates != null && _viewModel.WeeklyWinRates.Any())
+        {
+            <div class="col-sm-12 col-md-6">
+                <RadzenChart>
+                    <RadzenLineSeries Data="@_viewModel.WeeklyWinRates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by week (%)">
+                        <RadzenMarkers MarkerType="MarkerType.Diamond" />
+                    </RadzenLineSeries>
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" Step="5">
+                        <RadzenGridLines Visible="true" />
+                    </RadzenValueAxis>
+                    <RadzenCategoryAxis Padding="20" />
+                </RadzenChart>
+            </div>
+        }
+        @if (_viewModel.WeeklyMatchesPlayed != null && _viewModel.WeeklyMatchesPlayed.Any())
+        {
+            <div class="col-sm-12 col-md-6">
+                <RadzenChart>
+                    <RadzenLineSeries Data="@_viewModel.WeeklyMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played by week" >
+                        <RadzenMarkers MarkerType="MarkerType.Diamond" />
+                    </RadzenLineSeries>
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0">
+                        <RadzenGridLines Visible="true" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </div>
+        }
+    </div>
+</div>

@@ -1,8 +1,5 @@
 ﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
 
 namespace BoyumFoosballStats.Viewmodel
 {

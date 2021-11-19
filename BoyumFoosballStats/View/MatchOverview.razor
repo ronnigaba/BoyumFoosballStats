@@ -1,5 +1,7 @@
 ﻿@page "/MatchOverview"
 @inject IJSRuntime jsRuntime
+@attribute [Authorize]
+
 @if (@Matches.Any())
 {
     <h1>Data based on @Matches.Count matches</h1>

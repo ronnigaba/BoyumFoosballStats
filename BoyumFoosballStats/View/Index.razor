@@ -1,14 +1,91 @@
 ﻿@page "/"
-@inject IScoreInputViewModel _scoreInput
+<h3>Dashboard</h3>
+@if (Matches != null && Matches.Any())
+{
+    <p>Data based on @Matches.Count matches</p>
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <RadzenDropDown TValue="PlayerPosition?" Placeholder="Filter by position" AllowClear="true" Data="@WinRateFilterOptions" Change="@CalculateWinRates"></RadzenDropDown>
+        </div>
+    </div>
+    <div class="row">
+        @if (PlayerWinrates != null && PlayerWinrates.Any())
+        {
+            <div class="col-sm-12 col-md-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@PlayerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" Step="5" />
+                </RadzenChart>
+            </div>
+        }
+        @if (PlayerMatchesPlayed != null && PlayerMatchesPlayed.Any())
+        {
+            <div class="col-sm-12 col-md-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@PlayerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" />
+                </RadzenChart>
+            </div>
+        }
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        @if (TableSideWinRates != null && TableSideWinRates.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenPieSeries Data="@TableSideWinRates" Title="Win rate (%)" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                </RadzenChart>
+            </div>
+        }
+@*        @if (TeamWinrates != null && TeamWinrates.Any())
+        {
+            <div class="col-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@TeamWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
+                    <RadzenLegend Position="LegendPosition.Bottom" />
+                    <RadzenValueAxis Min="0" Step="5" />
+                </RadzenChart>
+            </div>
+        }*@
+    </div>
+</div>
 
-<h3>Score input</h3>
-<br />
-<EditForm Model="_scoreInput.Match" OnValidSubmit="@_scoreInput.SaveScores">
-    <DataAnnotationsValidator />
-    <TeamScore @bind-Team="_scoreInput.Match.Black" @bind-Score="_scoreInput.Match.ScoreBlack" @bind-Score:event="ScoreChanged"></TeamScore>
-    <br/>
-    <TeamScore @bind-Team="_scoreInput.Match.Gray" @bind-Score="_scoreInput.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
-    <br/>
-    <button disabled="@_scoreInput.SavingData" type="submit">Save score</button>
-    <ValidationSummary />
-</EditForm>
+@code {
+    public List<Match> Matches = new List<Match>();
+    private AzureBlobStorageHelper blobHelper;
+    private MatchAnalysisHelper analysisHelper;
+    
+    private IOrderedEnumerable<KeyValuePair<string, double>> PlayerWinrates;
+    private IOrderedEnumerable<KeyValuePair<string, double>> TeamWinrates;
+    private IOrderedEnumerable<KeyValuePair<string, int>> PlayerMatchesPlayed;
+    private Dictionary<string, double> TableSideWinRates;
+
+    private List<PlayerPosition?> WinRateFilterOptions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        WinRateFilterOptions = new List<PlayerPosition?> { PlayerPosition.Attacker, PlayerPosition.Defender, null };
+        analysisHelper = new MatchAnalysisHelper();
+        blobHelper = new AzureBlobStorageHelper();
+        Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
+        PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches);
+        //TeamWinrates = analysisHelper.CalculateWinRatesForAllTeams(Matches);
+        TableSideWinRates = analysisHelper.CalculateWinRatesForTableSides(Matches);
+        PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches);
+
+    }
+
+    private void CalculateWinRates(object value)
+    {
+        var positionFilter = value as PlayerPosition?;
+        PlayerWinrates = analysisHelper.CalculateWinRatesForAllPlayers(Matches, positionFilter);
+        PlayerMatchesPlayed = analysisHelper.CalculateMatchesPlayedForAllPlayers(Matches, positionFilter);
+    }
+}

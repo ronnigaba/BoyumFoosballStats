@@ -14,15 +14,16 @@ namespace BoyumFoosballStats.Viewmodel
         public Dictionary<string, int> WeeklyMatchesPlayed { get; set; }
         public void CalculateWeeklyStats(object value)
         {
-            var matchesByDate = analysisHelper.SortMatchesByWeek(Matches).OrderByDescending(x => x.Key);
+            var matchesByDate = analysisHelper.SortMatchesByWeek(Matches).OrderBy(x => x.Key);
             var player = (Player)value;
             WeeklyWinRates = new Dictionary<string, double>();
             WeeklyMatchesPlayed = new Dictionary<string, int>();
             foreach (var group in matchesByDate.TakeLast(5))
             {
                 var week = $"Week {@group.Key}";
-                WeeklyWinRates.Add(week, analysisHelper.CalculateWinRate(Matches, player));
-                WeeklyMatchesPlayed.Add(week, analysisHelper.CalculateMatchesPlayed(Matches, player));
+                var matches = group.ToList();
+                WeeklyWinRates.Add(week, analysisHelper.CalculateWinRate(matches, player));
+                WeeklyMatchesPlayed.Add(week, analysisHelper.CalculateMatchesPlayed(matches, player));
             }
         }
     }

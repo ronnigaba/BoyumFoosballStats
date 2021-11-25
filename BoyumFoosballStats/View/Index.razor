@@ -20,7 +20,7 @@
                     <RadzenBarSeries Data="@_viewModel.OverallWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" Step="5" />
-                </RadzenChart>HTML
+                </RadzenChart>
             }
             @if (ShowWinrateDrillDownChart && _viewModel.DrillDownAttackerWinrates != null && _viewModel.DrillDownDefenderWinrates != null)
             {

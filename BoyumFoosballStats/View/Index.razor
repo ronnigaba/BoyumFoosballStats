@@ -13,48 +13,44 @@
         </div>
     </div>
     <div class="row">
-        @if (!ShowWinrateDrillDownChart && _viewModel.OverallWinrates != null && _viewModel.OverallWinrates.Any())
-        {
-            <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6">
+            @if (!ShowWinrateDrillDownChart && _viewModel.OverallWinrates != null && _viewModel.OverallWinrates.Any())
+            {
                 <RadzenChart SeriesClick="@OnOverallWinrateSeriesClick">
                     <RadzenBarSeries Data="@_viewModel.OverallWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" Step="5" />
-                </RadzenChart>
-            </div>
-        }
-        @if (ShowWinrateDrillDownChart && _viewModel.DrillDownAttackerWinrates != null && _viewModel.DrillDownDefenderWinrates != null)
-        {
-            <div class="col-sm-12 col-md-6">
+                </RadzenChart>HTML
+            }
+            @if (ShowWinrateDrillDownChart && _viewModel.DrillDownAttackerWinrates != null && _viewModel.DrillDownDefenderWinrates != null)
+            {
                 <RadzenChart SeriesClick="@OnWinrateSeriesClick">
                     <RadzenBarSeries Data="@_viewModel.DrillDownAttackerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Attacker win rate (%)" />
                     <RadzenBarSeries Data="@_viewModel.DrillDownDefenderWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Defender win rate (%)" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" Step="5" />
                 </RadzenChart>
-            </div>
-        }
-        @if (!ShowMatchesPlayedDrillDownChart && _viewModel.OverallMatchesPlayed != null && _viewModel.OverallMatchesPlayed.Any())
-        {
-            <div class="col-sm-12 col-md-6">
+            }
+        </div>
+        <div class="col-sm-12 col-md-6">
+            @if (!ShowMatchesPlayedDrillDownChart && _viewModel.OverallMatchesPlayed != null && _viewModel.OverallMatchesPlayed.Any())
+            {
                 <RadzenChart SeriesClick="@OnOverallMatchesPlayedSeriesClick">
                     <RadzenBarSeries Data="@_viewModel.OverallMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" />
                 </RadzenChart>
-            </div>
-        }
-        @if (ShowMatchesPlayedDrillDownChart && _viewModel.DrillDownAttackerMatchesPlayed != null && _viewModel.DrillDownDefenderMatchesPlayed != null)
-        {
-            <div class="col-sm-12 col-md-6">
+            }
+            @if (ShowMatchesPlayedDrillDownChart && _viewModel.DrillDownAttackerMatchesPlayed != null && _viewModel.DrillDownDefenderMatchesPlayed != null)
+            {
                 <RadzenChart SeriesClick="@OnMatchesPlayedSeriesClick">
                     <RadzenBarSeries Data="@_viewModel.DrillDownAttackerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Attacker matches played" />
                     <RadzenBarSeries Data="@_viewModel.DrillDownDefenderMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Defender matches played" />
                     <RadzenLegend Position="LegendPosition.Bottom" />
                     <RadzenValueAxis Min="0" Step="5" />
                 </RadzenChart>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
 <div class="container">

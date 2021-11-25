@@ -48,7 +48,7 @@ namespace BoyumFoosballStats.Helper
                 return matches.Count(x => x.Black.Attacker == attacker && x.Black.Defender == defender
                                           || x.Gray.Attacker == attacker && x.Gray.Defender == defender);
             }
-            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender) 
+            return matches.Count(x => x.Black.Players.Contains(attacker) && x.Black.Players.Contains(defender)
                                       || x.Gray.Players.Contains(attacker) && x.Gray.Players.Contains(defender));
         }
 

@@ -20,7 +20,7 @@
             <RadzenDataGridColumn TItem="Match" Property="Id" TextAlign="TextAlign.Right">
                 <Template Context="match">
                     <RadzenButton Text="Delete"
-                              Click="@(args => ConfirmDeleteEntry(match.Id))">
+                              Click="@(args => ConfirmDeleteEntry(match))">
                     </RadzenButton>
                 </Template>
             </RadzenDataGridColumn>

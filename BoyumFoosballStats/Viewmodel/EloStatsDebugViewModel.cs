@@ -1,11 +1,13 @@
-﻿namespace BoyumFoosballStats.Viewmodel
+﻿using BoyumFoosballStats.Model;
+
+namespace BoyumFoosballStats.Viewmodel
 {
     public class EloStatsDebugViewModel : IEloStatsDebugViewModel
     {
-        public Dictionary<string, decimal> EloRatings { get; set; } = new Dictionary<string, decimal>();
+        public List<TeamEloRating> EloRatings { get; set; } = new ();
     }
     public interface IEloStatsDebugViewModel
     {
-        Dictionary<string, decimal> EloRatings { get; set; }
+        List<TeamEloRating> EloRatings { get; set; }
     }
 }

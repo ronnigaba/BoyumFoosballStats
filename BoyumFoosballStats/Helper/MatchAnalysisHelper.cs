@@ -126,7 +126,7 @@ namespace BoyumFoosballStats.Helper
             return result;
         }
 
-        public IEnumerable<IGrouping<int, Match>> SortMatchesByWeek(List<Match> matches)
+        public IEnumerable<IGrouping<string, Match>> SortMatchesByWeek(List<Match> matches)
         {
             return matches.GroupBy(x => DateHelper.GetCurrentWeekByDate(x.MatchDate));
         }

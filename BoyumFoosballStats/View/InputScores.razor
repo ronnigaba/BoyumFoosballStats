@@ -1,15 +1,21 @@
 ﻿@page "/InputScores"
-@inject IScoreInputViewModel _scoreInput
+@inject IScoreInputViewModel _viewModel
 @attribute [Authorize]
 
 <h3>Score input</h3>
 <br />
-<EditForm Model="_scoreInput.Match" OnValidSubmit="@_scoreInput.SaveScores">
+<EditForm Model="_viewModel.Match" OnValidSubmit="@_viewModel.SaveScores">
     <DataAnnotationsValidator />
-    <TeamScore @bind-Team="_scoreInput.Match.Black" @bind-Score="_scoreInput.Match.ScoreBlack" @bind-Score:event="ScoreChanged"></TeamScore>
+    <TeamScore @bind-Team="_viewModel.Match.Black" @bind-Score="_viewModel.Match.ScoreBlack" @bind-Score:event="ScoreChanged"></TeamScore>
     <br />
-    <TeamScore @bind-Team="_scoreInput.Match.Gray" @bind-Score="_scoreInput.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
+    <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
     <br />
-    <button disabled="@_scoreInput.SavingData" type="submit">Save score</button>
+    <button disabled="@_viewModel.SavingData" type="submit">Save score</button>
+@*    <RadzenButton Click="@_viewModel.PredictMatch" ></RadzenButton>
+    @if (_viewModel.MatchPrediction != null)
+    {
+        @_viewModel.MatchPrediction[0]
+        @_viewModel.MatchPrediction[1]
+    }*@
     <ValidationSummary />
 </EditForm>

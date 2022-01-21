@@ -1,25 +1,19 @@
 ﻿@inject IEloStatsDebugViewModel _viewModel;
 @page "/EloStats"
-<h3>EloStatsDebug</h3>
+<h3>Elo stats [debug]</h3>
 
 
 @if (_viewModel != null && _viewModel.EloRatings.Any())
 {
-    
-    @*<RadzenDataGrid>
-        <Columns>
-            <RadzenDataGridColumn >
 
+    <RadzenDataGrid Data="_viewModel.EloRatings.OrderByDescending(x=>x.EloRating)" TItem="TeamEloRating" AllowSorting="true">
+        <Columns>
+            <RadzenDataGridColumn TItem="TeamEloRating" Property="TeamIdentifier" Title="Team (Attacker / Defender)" />
+            <RadzenDataGridColumn TItem="TeamEloRating" Property="EloRating" Title="Elo rating">
+                <Template Context="data">
+                    @data.EloRating.ToString("0.###")
+                </Template>
             </RadzenDataGridColumn>
         </Columns>
-        <Columns>
-
-        </Columns>
-
-    </RadzenDataGrid>*@
-
-    @foreach (var rating in _viewModel.EloRatings.OrderByDescending(x=>x.Value))
-    {
-        <div>@rating.Key @rating.Value.ToString("0.###") </div>
-    }
+    </RadzenDataGrid>
 }

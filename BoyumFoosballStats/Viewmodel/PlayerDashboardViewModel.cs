@@ -1,6 +1,7 @@
 ﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
+using Radzen.Blazor;
 
 namespace BoyumFoosballStats.Viewmodel
 {
@@ -10,21 +11,32 @@ namespace BoyumFoosballStats.Viewmodel
         public AzureBlobStorageHelper blobHelper { get; set; }
         public MatchAnalysisHelper analysisHelper { get; set; }
         public IEnumerable<Player> PlayerFilterOption { get; set; }
-        public Dictionary<string, double> WeeklyWinRates { get; set; }
-        public Dictionary<string, int> WeeklyMatchesPlayed { get; set; }
+        public Dictionary<string, double>? WeeklyWinRates { get; set; } = new Dictionary<string, double>();
+        public Dictionary<string, int>? WeeklyMatchesPlayed { get; set; } = new Dictionary<string, int>();
+
+        private IOrderedEnumerable<IGrouping<string, Match>> MatchesByDate { get; set; }
         public void CalculateWeeklyStats(object value)
         {
-            var matchesByDate = analysisHelper.SortMatchesByWeek(Matches).OrderBy(x => x.Key);
+            if (MatchesByDate == null || !MatchesByDate.Any())
+            {
+                MatchesByDate = analysisHelper.SortMatchesByWeek(Matches).TakeLast(5).OrderBy(x => x.Key);
+            }
             var player = (Player)value;
-            WeeklyWinRates = new Dictionary<string, double>();
-            WeeklyMatchesPlayed = new Dictionary<string, int>();
-            foreach (var group in matchesByDate.TakeLast(5))
+            var weeklyWinRates = new Dictionary<string, double>();
+            var weeklyMatchesPlayed = new Dictionary<string, int>();
+            foreach (var group in MatchesByDate)
             {
                 var week = $"Week {@group.Key}";
                 var matches = group.ToList();
-                WeeklyWinRates.Add(week, analysisHelper.CalculateWinRate(matches, player));
-                WeeklyMatchesPlayed.Add(week, analysisHelper.CalculateMatchesPlayed(matches, player));
+                var winRate = analysisHelper.CalculateWinRate(matches, player);
+                if (!double.IsNaN(winRate))
+                {
+                    weeklyWinRates.Add(week, winRate);
+                }
+                weeklyMatchesPlayed.Add(week, analysisHelper.CalculateMatchesPlayed(matches, player));
             }
+            WeeklyWinRates = weeklyWinRates.Any() ? weeklyWinRates : null;
+            WeeklyMatchesPlayed = weeklyMatchesPlayed.Any() ? weeklyMatchesPlayed : null;
         }
     }
 

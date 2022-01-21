@@ -37,7 +37,7 @@ namespace BoyumFoosballStats.Model
         public int WinningScore => ScoreBlack > ScoreGray ? ScoreBlack : ScoreGray;
         [JsonIgnore]
         public int LosingScore => ScoreBlack > ScoreGray ? ScoreGray : ScoreBlack;
-
+        
         public bool IsValid()
         {
             var players = new List<Player?>() { Black.Attacker, Black.Defender, Gray.Attacker, Gray.Defender };

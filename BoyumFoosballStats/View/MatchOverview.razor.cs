@@ -16,7 +16,7 @@ namespace BoyumFoosballStats.View
         protected override async Task OnInitializedAsync()
         {
             blobHelper = new AzureBlobStorageHelper();
-            Matches = await blobHelper.GetMatches(AzureBlobStorageHelper.DefaultFileName);
+            Matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
         }
 
         void CellRender(DataGridCellRenderEventArgs<Match> args)
@@ -34,14 +34,14 @@ namespace BoyumFoosballStats.View
             }
         }
 
-        private async void ConfirmDeleteEntry(string id)
+        private async void ConfirmDeleteEntry(Match match)
         {
             if (!await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this match?"))
             {
                 return;
             }
-            Matches.RemoveAll(x => x.Id == id);
-            await blobHelper.RemoveEntry(id);
+            Matches.Remove(match);
+            await blobHelper.RemoveEntry<Match>(match, AzureBlobStorageHelper.DefaultMatchesFileName);
             await dataGrid.Reload();
         }
     }

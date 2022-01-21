@@ -22,6 +22,6 @@ namespace BoyumFoosballStats.Model
         [JsonIgnore]
         public List<Player?> Players => new List<Player?>() { Attacker, Defender };
 
-        [JsonIgnore] public string GetTeamIdentifier => $"{Attacker} {Defender}";
+        [JsonIgnore] public string TeamIdentifier => $"{Attacker} {Defender}";
     }
 }

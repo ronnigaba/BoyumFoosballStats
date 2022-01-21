@@ -8,10 +8,12 @@ namespace BoyumFoosballStats.Helper
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-#if DEBUG
-        public static string DefaultFileName = "matches_debug.json";
+#if !DEBUG
+        public static string DefaultMatchesFileName = "matches_debug.json";
+        public static string DefaultEloFileName = "elo_debug.json";
 #else
-        public static string DefaultFileName = "matches.json";
+        public static string DefaultMatchesFileName = "matches.json";
+        public static string DefaultEloFileName = "elo.json";
 #endif
 
         private readonly string blobSasUrl =
@@ -21,45 +23,45 @@ namespace BoyumFoosballStats.Helper
             _blobServiceClient = new BlobServiceClient(new Uri(blobSasUrl));
         }
 
-        public async Task UploadMatches(List<Match> matches, string fileName, bool overwrite = false)
+        public async Task UploadList<T>(List<T> entries, string fileName, bool overwrite = false)
         {
-            var matchesToUpload = new List<Match>();
+            var entriesToUpload = new List<T>();
             BlobClient blobClient = GetBlobClient(containerName, fileName);
             if (!overwrite)
             {
-                matchesToUpload.AddRange(await GetMatches(fileName));
+                entriesToUpload.AddRange(await GetEntries<T>(fileName));
             }
-            matchesToUpload.AddRange(matches);
+            entriesToUpload.AddRange(entries);
             var localFilePath = $"./{fileName}";
-            var matchesJson = JsonSerializer.Serialize(matchesToUpload);
-            await File.WriteAllTextAsync(localFilePath, matchesJson);
+            var json = JsonSerializer.Serialize(entriesToUpload);
+            await File.WriteAllTextAsync(localFilePath, json);
 
             await blobClient.UploadAsync(localFilePath, true);
         }
 
-        public async Task<List<Match>> GetMatches(string fileName)
+        public async Task<List<T>> GetEntries<T>(string fileName)
         {
             BlobClient blobClient = GetBlobClient(containerName, fileName);
 
             if (await blobClient.ExistsAsync())
             {
                 var blobResult = await blobClient.DownloadContentAsync();
-                var matches = JsonSerializer.Deserialize<List<Match>>(blobResult.Value.Content);
-                if (matches != null && matches.Any())
+                var entries = JsonSerializer.Deserialize<List<T>>(blobResult.Value.Content);
+                if (entries != null && entries.Any())
                 {
-                    return matches;
+                    return entries;
                 }
             }
-            return new List<Match>();
+            return new List<T>();
 
         }
 
-        public async Task<List<Match>> RemoveEntry(string id)
+        public async Task<List<T>> RemoveEntry<T>(T entry, string fileName)
         {
-            var matches = await GetMatches(DefaultFileName);
-            matches.RemoveAll(x => x.Id == id);
-            await UploadMatches(matches, DefaultFileName, true);
-            return matches;
+            var entries = await GetEntries<T>(fileName);
+            entries.Remove(entry);
+            await UploadList(entries, DefaultMatchesFileName, true);
+            return entries;
         }
 
         private BlobClient GetBlobClient(string containerName, string fileName)

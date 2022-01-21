@@ -1,13 +1,17 @@
 ﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
+using Kezyma.EloRating;
 
 namespace BoyumFoosballStats.Viewmodel
 {
 
     public class ScoreInputViewModel : IScoreInputViewModel
     {
+        public AzureBlobStorageHelper? BlobStorageHelper { get; set; }
+        public List<TeamEloRating>? EloRatings { get; set; }
         public Match Match { get; set; } = new Match();
         public bool SavingData { get; set; }
+        public decimal[]? MatchPrediction { get; set; }
 
         public async Task SaveScores()
         {
@@ -16,13 +20,23 @@ namespace BoyumFoosballStats.Viewmodel
             {
                 Match.MatchDate = DateTime.Now;
                 var matches = new List<Match> { Match };
-                var azureBlobHelper = new AzureBlobStorageHelper();
-                await azureBlobHelper.UploadMatches(matches, AzureBlobStorageHelper.DefaultFileName);
-                await Reset();
+                if (BlobStorageHelper != null)
+                {
+                    await BlobStorageHelper.UploadList(matches, AzureBlobStorageHelper.DefaultMatchesFileName);
+                    await Reset();
+                }
             }
             SavingData = false;
         }
 
+        public async Task PredictMatch()
+        {
+            await Task.Delay(0);
+            var grayElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifier)?.EloRating ?? 0;
+            var blackElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifier)?.EloRating ?? 0;
+            var prediction = EloCalculator.PredictResult(grayElo, blackElo);
+            MatchPrediction = prediction;
+        }
 
         public async Task Reset()
         {
@@ -35,9 +49,13 @@ namespace BoyumFoosballStats.Viewmodel
     }
     public interface IScoreInputViewModel
     {
+        AzureBlobStorageHelper BlobStorageHelper { get; set; }
+        List<TeamEloRating>? EloRatings { get; set; }
         Match Match { get; set; }
         bool SavingData { get; set; }
+        decimal[]? MatchPrediction { get; set; }
         Task SaveScores();
+        Task PredictMatch();
 
         Task Reset();
     }

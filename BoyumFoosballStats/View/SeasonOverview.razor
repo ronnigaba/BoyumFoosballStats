@@ -1,0 +1,15 @@
+﻿@page "/SeasonOverview";
+@inject ISeasonDashboardViewModel _viewModel;
+
+<h3>Season overview</h3>
+@if (_viewModel.SeasonFilterOptions.Any())
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <RadzenDropDown TValue="string" Placeholder="Filter by season" Data="@_viewModel.SeasonFilterOptions" Change="@_viewModel.CalculateSeasonStats"></RadzenDropDown>
+            </div>
+        </div>
+    </div>
+}
+<DashboardShared ViewModel="_viewModel"></DashboardShared>

@@ -26,12 +26,17 @@ namespace BoyumFoosballStats.Model
         public int ScoreGray { get; set; }
 
         public DateTime MatchDate { get; set; }
-        
+
         [JsonIgnore]
         public Team WinningTeam => ScoreBlack > ScoreGray ? Black : Gray;
-        
+
         [JsonIgnore]
         public Team LosingTeam => ScoreBlack > ScoreGray ? Gray : Black;
+
+        [JsonIgnore]
+        public int WinningScore => ScoreBlack > ScoreGray ? ScoreBlack : ScoreGray;
+        [JsonIgnore]
+        public int LosingScore => ScoreBlack > ScoreGray ? ScoreGray : ScoreBlack;
 
         public bool IsValid()
         {

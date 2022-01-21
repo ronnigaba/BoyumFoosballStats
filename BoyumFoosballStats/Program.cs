@@ -15,6 +15,7 @@ builder.Services.AddMsalAuthentication(options =>
 builder.Services.AddScoped<IScoreInputViewModel, ScoreInputViewModel>();
 builder.Services.AddScoped<ITeamScoreViewModel, TeamScoreViewModel>();
 builder.Services.AddScoped<IDashboardViewModel, DashboardViewModel>();
+builder.Services.AddScoped<ISeasonDashboardViewModel, SeasonDashboardViewModel>();
 builder.Services.AddScoped<IPlayerDashboardViewModel, PlayerDashboardViewModel>();
 
 await builder.Build().RunAsync();

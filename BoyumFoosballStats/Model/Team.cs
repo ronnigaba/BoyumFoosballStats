@@ -3,21 +3,24 @@ using BoyumFoosballStats.Model.Enums;
 
 namespace BoyumFoosballStats.Model
 {
-    public class Team
+    public class Team : TeamBase
     {
         public Team(TableSide side)
         {
             Side = side;
-            Attacker = null;
-            Defender = null;
         }
 
+        public TableSide Side { get; set; }
+    }
+
+    public class TeamBase
+    {
         public Player? Attacker { get; set; }
 
         public Player? Defender { get; set; }
-        public TableSide Side { get; set; }
 
         [JsonIgnore]
         public List<Player?> Players => new List<Player?>() { Attacker, Defender };
+
     }
 }

@@ -63,14 +63,13 @@ namespace BoyumFoosballStats.Helper
             var result = new Dictionary<string, double>();
             var values = Enum.GetValues(typeof(Player)).Cast<Player>();
             var combinations = CollectionCombinationHelper.GetCombinations<Player>(values, 2);
-            var test = combinations.ToList();
-            foreach (var l in test)
+            var teamCombinations = combinations.ToList();
+            foreach (var team in teamCombinations)
             {
-                var p = l.ToList();
-                var attacker = p[0];
-                var defender = p[1];
+                var p = team.ToList();
+                var attacker = p.First();
+                var defender = p.Last();
                 var count = CalculateMatchesPlayed(matches, attacker, defender, ignorePositions);
-                Console.WriteLine($"{attacker}/{defender}  " + count);
                 if (count > 0)
                 {
                     result.Add($"{attacker}/{defender}", CalculateWinRateTeam(matches, attacker, defender, ignorePositions));
@@ -130,6 +129,11 @@ namespace BoyumFoosballStats.Helper
         public IEnumerable<IGrouping<int, Match>> SortMatchesByWeek(List<Match> matches)
         {
             return matches.GroupBy(x => DateHelper.GetCurrentWeekByDate(x.MatchDate));
+        }
+
+        public IEnumerable<IGrouping<string, Match>> SortMatchesBySeason(List<Match> matches)
+        {
+            return matches.GroupBy(x => x.MatchDate.ToString("yyyy/MM"));
         }
     }
 }

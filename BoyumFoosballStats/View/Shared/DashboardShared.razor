@@ -1,0 +1,78 @@
+﻿@if (ViewModel != null)
+{
+    @if (ViewModel.Matches != null && ViewModel.Matches.Any())
+    {
+        <p>Data based on @ViewModel.Matches.Count matches</p>
+    }
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <RadzenDropDown TValue="PlayerPosition?" Placeholder="Filter by position" AllowClear="true" Data="@ViewModel.WinRateFilterOptions" Change="@ViewModel.CalculateWinRates"></RadzenDropDown>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                @if (!ShowWinrateDrillDownChart && ViewModel.OverallWinrates != null && ViewModel.OverallWinrates.Any())
+                {
+                    <RadzenChart SeriesClick="@OnOverallWinrateSeriesClick">
+                        <RadzenBarSeries Data="@ViewModel.OverallWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                }
+                @if (ShowWinrateDrillDownChart && ViewModel.DrillDownAttackerWinrates != null && ViewModel.DrillDownDefenderWinrates != null)
+                {
+                    <RadzenChart SeriesClick="@OnWinrateSeriesClick">
+                        <RadzenBarSeries Data="@ViewModel.DrillDownAttackerWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Attacker win rate (%)" />
+                        <RadzenBarSeries Data="@ViewModel.DrillDownDefenderWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Defender win rate (%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                }
+            </div>
+            <div class="col-sm-12 col-md-6">
+                @if (!ShowMatchesPlayedDrillDownChart && ViewModel.OverallMatchesPlayed != null && ViewModel.OverallMatchesPlayed.Any())
+                {
+                    <RadzenChart SeriesClick="@OnOverallMatchesPlayedSeriesClick">
+                        <RadzenBarSeries Data="@ViewModel.OverallMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" />
+                    </RadzenChart>
+                }
+                @if (ShowMatchesPlayedDrillDownChart && ViewModel.DrillDownAttackerMatchesPlayed != null && ViewModel.DrillDownDefenderMatchesPlayed != null)
+                {
+                    <RadzenChart SeriesClick="@OnMatchesPlayedSeriesClick">
+                        <RadzenBarSeries Data="@ViewModel.DrillDownAttackerMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Attacker matches played" />
+                        <RadzenBarSeries Data="@ViewModel.DrillDownDefenderMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Defender matches played" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="container" style="height: 1000px;">
+        <div class="row justify-content-center">
+            @if (ViewModel.TableSideWinRates != null && ViewModel.TableSideWinRates.Any())
+            {
+                <div class="col-6">
+                    <RadzenChart>
+                        <RadzenPieSeries Data="@ViewModel.TableSideWinRates" Title="Win rate (%)" CategoryProperty="Key" ValueProperty="Value" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                    </RadzenChart>
+                </div>
+            }
+            @if (ViewModel.TeamWinrates != null && ViewModel.TeamWinrates.Any())
+            {
+                <div class="col-6">
+                    <RadzenChart>
+                        <RadzenBarSeries Data="@ViewModel.TeamWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                </div>
+            }
+        </div>
+    </div>
+
+}

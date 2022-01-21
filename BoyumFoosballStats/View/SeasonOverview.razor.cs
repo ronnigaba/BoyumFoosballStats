@@ -1,4 +1,5 @@
 ﻿using BoyumFoosballStats.Helper;
+using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
 using Microsoft.AspNetCore.Components;
 

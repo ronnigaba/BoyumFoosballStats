@@ -1,0 +1,25 @@
+﻿@inject IEloStatsDebugViewModel _viewModel;
+@page "/EloStats"
+<h3>EloStatsDebug</h3>
+
+
+@if (_viewModel != null && _viewModel.EloRatings.Any())
+{
+    
+    @*<RadzenDataGrid>
+        <Columns>
+            <RadzenDataGridColumn >
+
+            </RadzenDataGridColumn>
+        </Columns>
+        <Columns>
+
+        </Columns>
+
+    </RadzenDataGrid>*@
+
+    @foreach (var rating in _viewModel.EloRatings.OrderByDescending(x=>x.Value))
+    {
+        <div>@rating.Key @rating.Value.ToString("0.###") </div>
+    }
+}

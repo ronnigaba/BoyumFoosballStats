@@ -2,12 +2,12 @@
 
 namespace BoyumFoosballStats.Viewmodel
 {
-    public class EloStatsDebugViewModel : IEloStatsDebugViewModel
+    public class TeamStatsDebugViewModel : ITeamStatsDebugViewModel
     {
-        public List<TeamEloRating> EloRatings { get; set; } = new ();
+        public List<TeamStatistics> TeamStatistics { get; set; } = new ();
     }
-    public interface IEloStatsDebugViewModel
+    public interface ITeamStatsDebugViewModel
     {
-        List<TeamEloRating> EloRatings { get; set; }
+        List<TeamStatistics> TeamStatistics { get; set; }
     }
 }

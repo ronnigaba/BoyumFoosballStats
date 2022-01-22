@@ -9,7 +9,7 @@ namespace BoyumFoosballStats.View
         {
             await base.OnInitializedAsync();
             _viewModel.BlobStorageHelper = new AzureBlobStorageHelper();
-            _viewModel.EloRatings = await _viewModel.BlobStorageHelper.GetEntries<TeamEloRating>(AzureBlobStorageHelper.DefaultEloFileName);
+            _viewModel.EloRatings = await _viewModel.BlobStorageHelper.GetEntries<TeamStatistics>(AzureBlobStorageHelper.DefaultEloFileName);
         }
     }
 }

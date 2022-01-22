@@ -8,7 +8,7 @@ namespace BoyumFoosballStats.Viewmodel
     public class ScoreInputViewModel : IScoreInputViewModel
     {
         public AzureBlobStorageHelper? BlobStorageHelper { get; set; }
-        public List<TeamEloRating>? EloRatings { get; set; }
+        public List<TeamStatistics>? EloRatings { get; set; }
         public Match Match { get; set; } = new Match();
         public bool SavingData { get; set; }
         public decimal[]? MatchPrediction { get; set; }
@@ -50,7 +50,7 @@ namespace BoyumFoosballStats.Viewmodel
     public interface IScoreInputViewModel
     {
         AzureBlobStorageHelper BlobStorageHelper { get; set; }
-        List<TeamEloRating>? EloRatings { get; set; }
+        List<TeamStatistics>? EloRatings { get; set; }
         Match Match { get; set; }
         bool SavingData { get; set; }
         decimal[]? MatchPrediction { get; set; }

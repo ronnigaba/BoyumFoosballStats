@@ -1,15 +1,26 @@
-﻿@inject IEloStatsDebugViewModel _viewModel;
-@page "/EloStats"
-<h3>Elo stats [debug]</h3>
+﻿@inject ITeamStatsDebugViewModel _viewModel;
+@page "/TeamStats"
+<h3>Team stats</h3>
 
 
-@if (_viewModel != null && _viewModel.EloRatings.Any())
+@if (_viewModel != null && _viewModel.TeamStatistics.Any())
 {
-
-    <RadzenDataGrid Data="_viewModel.EloRatings.OrderByDescending(x=>x.EloRating)" TItem="TeamEloRating" AllowSorting="true">
+    <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.EloRating)" TItem="TeamStatistics" AllowFiltering="true"
+                    AllowSorting="true" FilterMode="FilterMode.Simple" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    LogicalFilterOperator="LogicalFilterOperator.And">
         <Columns>
-            <RadzenDataGridColumn TItem="TeamEloRating" Property="TeamIdentifier" Title="Team (Attacker / Defender)" />
-            <RadzenDataGridColumn TItem="TeamEloRating" Property="EloRating" Title="Elo rating">
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="MatchesPlayed" Title="Matches played" Filterable="false" />
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRate" Title="Win rate" Filterable="false">
+                <Template Context="data">
+                    @data.WinRate.ToString("0.##")%
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalsScored" Title="Goals scored" Filterable="false"/>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalsAgainst" Title="Goals against" Filterable="false"/>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalDifference" Title="Goal difference" Filterable="false"/>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRating" Title="Elo rating" Filterable="false">
                 <Template Context="data">
                     @data.EloRating.ToString("0.###")
                 </Template>

@@ -13,10 +13,10 @@ namespace BoyumFoosballStats.View
             await base.OnInitializedAsync();
             var blobHelper = new AzureBlobStorageHelper();
             var allMatches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
-            var eloRatingHelper = new EloRatingHelper();
-            var eloRatings = eloRatingHelper.CalculateTeamEloRatings(allMatches);
-            _viewModel.EloRatings = eloRatings;
-            await blobHelper.UploadList<TeamEloRating>(eloRatings, AzureBlobStorageHelper.DefaultEloFileName, true);
+            var teamStatsController = new TeamStatisticsController();
+            var teamStats = teamStatsController.CalculateTeamStats(allMatches);
+            _viewModel.TeamStatistics = teamStats;
+            await blobHelper.UploadList<TeamStatistics>(teamStats, AzureBlobStorageHelper.DefaultEloFileName, true);
         }
     }
 }

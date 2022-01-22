@@ -16,7 +16,7 @@ builder.Services.AddScoped<IScoreInputViewModel, ScoreInputViewModel>();
 builder.Services.AddScoped<ITeamScoreViewModel, TeamScoreViewModel>();
 builder.Services.AddScoped<IDashboardViewModel, DashboardViewModel>();
 builder.Services.AddScoped<ISeasonDashboardViewModel, SeasonDashboardViewModel>();
-builder.Services.AddScoped<IEloStatsDebugViewModel, EloStatsDebugViewModel>();
+builder.Services.AddScoped<ITeamStatsDebugViewModel, TeamStatsDebugViewModel>();
 builder.Services.AddScoped<IPlayerDashboardViewModel, PlayerDashboardViewModel>();
 
 await builder.Build().RunAsync();

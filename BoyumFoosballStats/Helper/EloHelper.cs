@@ -25,7 +25,7 @@ public class EloHelper
 
     public static Decimal[] PredictResult(Decimal currentRatingA, Decimal currentRatingB) => new Decimal[2]
     {
-        1M / (1M + (Decimal) Math.Pow(10.0, (double) (currentRatingB - currentRatingA) / 400.0)) * 100,
-        1M / (1M + (Decimal) Math.Pow(10.0, (double) (currentRatingA - currentRatingB) / 400.0)) * 100
+        1M / (1M + (Decimal) Math.Pow(10.0, (double) (currentRatingB - currentRatingA) / 400.0)),
+        1M / (1M + (Decimal) Math.Pow(10.0, (double) (currentRatingA - currentRatingB) / 400.0))
     };
 }

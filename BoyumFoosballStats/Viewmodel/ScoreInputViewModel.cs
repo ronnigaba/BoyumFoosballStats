@@ -1,6 +1,5 @@
 ﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
-using Kezyma.EloRating;
 
 namespace BoyumFoosballStats.Viewmodel
 {
@@ -34,7 +33,7 @@ namespace BoyumFoosballStats.Viewmodel
             await Task.Delay(0);
             var grayElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifier)?.EloRating ?? 0;
             var blackElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifier)?.EloRating ?? 0;
-            var prediction = EloCalculator.PredictResult(grayElo, blackElo);
+            var prediction = EloHelper.PredictResult(grayElo, blackElo);
             MatchPrediction = prediction;
         }
 

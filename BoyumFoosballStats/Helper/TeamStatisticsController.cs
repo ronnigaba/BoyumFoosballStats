@@ -1,11 +1,10 @@
 ﻿using BoyumFoosballStats.Model;
-using Kezyma.EloRating;
 
 namespace BoyumFoosballStats.Helper
 {
     public class TeamStatisticsController
     {
-        public List<TeamStatistics> CalculateTeamStats(List<Match> matches)
+        public List<TeamStatistics> CalculateTeamStats(List<Match> matches, int kFactor = 15)
         {
             var eloRatings = new List<TeamStatistics>();
 
@@ -18,7 +17,7 @@ namespace BoyumFoosballStats.Helper
                 var winningTeamStats = eloRatings.SingleOrDefault(x => x.TeamIdentifier == winningIdentifier);
                 var winningElo = winningTeamStats?.EloRating ?? 0;
 
-                var newElo = EloCalculator.CalculateElo(winningElo, losingElo, (decimal)EloCalculator.WIN, (decimal)EloCalculator.LOSE);
+                var newElo = EloHelper.CalculateElo(winningElo, losingElo, (decimal)EloHelper.WIN, (decimal)EloHelper.LOSE, kFactor);
                 if (winningTeamStats == null)
                 {
                     eloRatings.Add(new TeamStatistics { TeamIdentifier = winningIdentifier });
@@ -44,13 +43,13 @@ namespace BoyumFoosballStats.Helper
             return eloRatings;
         }
 
-        public double CalculateEloAccuracy(List<Match> matches, List<TeamStatistics>? teamStats = null)
+        public double CalculateEloAccuracy(List<Match> matches, List<TeamStatistics>? teamStats = null, int kFactor = 15)
         {
             int unexpectedWins = 0;
             int expectedWins = 0;
             if (teamStats == null)
             {
-                teamStats = CalculateTeamStats(matches);
+                teamStats = CalculateTeamStats(matches, kFactor);
             }
             foreach (var match in matches)
             {
@@ -58,7 +57,7 @@ namespace BoyumFoosballStats.Helper
                 var losingElo = losingRating?.EloRating ?? 0;
                 var winningRating = teamStats.SingleOrDefault(x => x.TeamIdentifier == match.WinningTeam.TeamIdentifier);
                 var winningElo = winningRating?.EloRating ?? 0;
-                var prediction = EloCalculator.PredictResult(winningElo, losingElo);
+                var prediction = EloHelper.PredictResult(winningElo, losingElo);
                 if (prediction[0] > prediction[1])
                 {
                     expectedWins++;

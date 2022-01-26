@@ -9,6 +9,7 @@
         <option value="@player">@player</option>
         }
 </InputSelect>
+    <RadzenButton Click="SwapPlayers" Icon="compare_arrows" ButtonStyle="ButtonStyle.Light"></RadzenButton>
     <InputSelect @bind-Value="Team.Defender">
         <option value="">Defender</option>
         @foreach (var player in Enum.GetValues(typeof(Player)))
@@ -50,4 +51,11 @@
 
     [Parameter]
     public EventCallback<int> ScoreChanged { get; set; }
+
+    private void SwapPlayers()
+    {
+        var temp = Team.Attacker;
+        Team.Attacker = Team.Defender;
+        Team.Defender = temp;
+    }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/InputScores"
 @inject IScoreInputViewModel _viewModel
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 <h3>Score input</h3>
 <br />
@@ -10,12 +10,12 @@
     <br />
     <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
     <br />
-    <button disabled="@_viewModel.SavingData" type="submit">Save score</button>
+    <RadzenButton disabled="@_viewModel.SavingData" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Light">Save</RadzenButton>
 @*    <RadzenButton Click="@_viewModel.PredictMatch" ></RadzenButton>
     @if (_viewModel.MatchPrediction != null)
     {
-        @_viewModel.MatchPrediction[0]
-        @_viewModel.MatchPrediction[1]
+        @_viewModel.MatchPrediction[0].ToString("0.##")
+        @_viewModel.MatchPrediction[1].ToString("0.##")
     }*@
     <ValidationSummary />
 </EditForm>

@@ -1,7 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using BoyumFoosballStats.Helper;
+﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
-using Kezyma.EloRating;
 using Microsoft.AspNetCore.Components;
 
 namespace BoyumFoosballStats.View

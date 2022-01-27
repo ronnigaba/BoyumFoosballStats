@@ -21,7 +21,9 @@ namespace BoyumFoosballStats.View
             {
                 _viewModel.SeasonFilterOptions.Add(grouping.Key);
             }
-            _viewModel.Matches = viewModelMatchesBySeason.Last().ToList();
+
+            _viewModel.SeasonFilterValue = _viewModel.SeasonFilterOptions.First();
+            _viewModel.Matches = viewModelMatchesBySeason.First().ToList();
             _viewModel.CalculateStats();
         }
     }

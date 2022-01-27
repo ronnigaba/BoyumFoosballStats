@@ -6,6 +6,7 @@ namespace BoyumFoosballStats.Viewmodel
     {
         public IEnumerable<IGrouping<string, Match>>? MatchesBySeason { get; set; }
         public List<string> SeasonFilterOptions { get; set; } = new List<string>();
+        public string? SeasonFilterValue { get; set; }
 
         public void CalculateSeasonStats(object value)
         {
@@ -22,6 +23,7 @@ namespace BoyumFoosballStats.Viewmodel
     {
         IEnumerable<IGrouping<string, Match>> MatchesBySeason { get; set; }
         List<string> SeasonFilterOptions { get; set; }
+        string SeasonFilterValue{ get; set; }
         void CalculateSeasonStats(object value);
     }
 }

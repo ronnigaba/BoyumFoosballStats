@@ -1,26 +1,21 @@
 ﻿@using BoyumFoosballStats.Model.Enums
-@if (Team != null)
+    @if (Team != null)
 {
     <p>@GetTeamName()</p>
-    <InputSelect @bind-Value="Team.Attacker">
-        <option value="">Attacker</option>
-        @foreach (var player in Enum.GetValues(typeof(Player)))
-        {
-        <option value="@player">@player</option>
-        }
-</InputSelect>
-    <RadzenButton Click="SwapPlayers" Icon="compare_arrows" ButtonStyle="ButtonStyle.Light"></RadzenButton>
-    <InputSelect @bind-Value="Team.Defender">
-        <option value="">Defender</option>
-        @foreach (var player in Enum.GetValues(typeof(Player)))
-        {
-        <option value="@player">@player</option>
-        }
-</InputSelect>
+    <div class="row">
+        <div class="col-12 d-flex align-items-center">
+            <RadzenDropDown TValue="Player?" @bind-Value="Team.Attacker" Placeholder="Attacker" Data="@Players" Change="@TeamChangedInternal"></RadzenDropDown>
+            <RadzenButton Click="SwapPlayers" Icon="compare_arrows" ButtonStyle="ButtonStyle.Light"></RadzenButton>
+            <RadzenDropDown TValue="Player?" @bind-Value="Team.Defender" Placeholder="Defender" Data="@Players" Change="@TeamChangedInternal"></RadzenDropDown>
+        </div>
+    </div>
 }
 <p>Score</p>
-<InputNumber @bind-Value="InternalScore" />
-
+<div class="row">
+    <div class="col-12 d-flex align-items-center">
+        <InputNumber @bind-Value="InternalScore" />
+    </div>
+</div>
 @code
 {
     private string GetTeamName()
@@ -40,6 +35,8 @@
         }
     }
 
+    public List<Player> Players = Enum.GetValues<Player>().ToList();
+
     [Parameter]
     public Team? Team { get; set; }
 
@@ -51,6 +48,14 @@
 
     [Parameter]
     public EventCallback<int> ScoreChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnTeamChanged { get; set; }
+
+    public void TeamChangedInternal()
+    {
+        OnTeamChanged.InvokeAsync();
+    }
 
     private void SwapPlayers()
     {

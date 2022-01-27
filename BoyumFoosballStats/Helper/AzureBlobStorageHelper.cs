@@ -23,7 +23,7 @@ namespace BoyumFoosballStats.Helper
             _blobServiceClient = new BlobServiceClient(new Uri(blobSasUrl));
         }
 
-        public async Task UploadList<T>(List<T> entries, string fileName, bool overwrite = false)
+        public async Task<List<T>> UploadList<T>(List<T> entries, string fileName, bool overwrite = false)
         {
             var entriesToUpload = new List<T>();
             BlobClient blobClient = GetBlobClient(containerName, fileName);
@@ -37,6 +37,7 @@ namespace BoyumFoosballStats.Helper
             await File.WriteAllTextAsync(localFilePath, json);
 
             await blobClient.UploadAsync(localFilePath, true);
+            return entriesToUpload;
         }
 
         public async Task<List<T>> GetEntries<T>(string fileName)

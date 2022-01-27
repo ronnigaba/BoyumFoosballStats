@@ -1,21 +1,30 @@
 ﻿@page "/InputScores"
 @inject IScoreInputViewModel _viewModel
-@*@attribute [Authorize]*@
+@attribute [Authorize]
 
 <h3>Score input</h3>
 <br />
-<EditForm Model="_viewModel.Match" OnValidSubmit="@_viewModel.SaveScores">
-    <DataAnnotationsValidator />
-    <TeamScore @bind-Team="_viewModel.Match.Black" @bind-Score="_viewModel.Match.ScoreBlack" @bind-Score:event="ScoreChanged"></TeamScore>
-    <br />
-    <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged"></TeamScore>
-    <br />
-    <RadzenButton disabled="@_viewModel.SavingData" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Light">Save</RadzenButton>
-@*    <RadzenButton Click="@_viewModel.PredictMatch" ></RadzenButton>
-    @if (_viewModel.MatchPrediction != null)
-    {
-        @_viewModel.MatchPrediction[0].ToString("0.##")
-        @_viewModel.MatchPrediction[1].ToString("0.##")
-    }*@
-    <ValidationSummary />
-</EditForm>
+<div class="container">
+    <div class="row">
+        <div class="col-6" style="background-color:lightgray">
+            @if (_viewModel.MatchPrediction != null)
+            {
+                <RadzenLabel Text="Match predictions" class="d-block"></RadzenLabel>
+                <RadzenLabel Text="@_viewModel.GetMatchPredictionText()" class="d-block"></RadzenLabel>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <EditForm Model="_viewModel.Match" OnValidSubmit="@_viewModel.SaveScores">
+                <DataAnnotationsValidator />
+                <TeamScore @bind-Team="_viewModel.Match.Black" @bind-Score="_viewModel.Match.ScoreBlack" @bind-Score:event="ScoreChanged" OnTeamChanged="_viewModel.PredictMatch"></TeamScore>
+                <br />
+                <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged" OnTeamChanged="_viewModel.PredictMatch"></TeamScore>
+                <br />
+                <RadzenButton disabled="@_viewModel.SavingData" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Light">Save</RadzenButton>
+                <ValidationSummary />
+            </EditForm>
+        </div>
+    </div>
+</div>

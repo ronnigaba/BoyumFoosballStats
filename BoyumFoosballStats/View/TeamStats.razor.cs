@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BoyumFoosballStats.View
 {
-    public partial class EloStatsDebug : ComponentBase
+    public partial class TeamStats : ComponentBase
     {
         protected override async Task OnInitializedAsync()
         {

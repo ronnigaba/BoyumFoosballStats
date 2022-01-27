@@ -2,11 +2,11 @@
 
 namespace BoyumFoosballStats.Viewmodel
 {
-    public class TeamStatsDebugViewModel : ITeamStatsDebugViewModel
+    public class TeamStatsViewModel : ITeamStatsViewModel
     {
         public List<TeamStatistics> TeamStatistics { get; set; } = new ();
     }
-    public interface ITeamStatsDebugViewModel
+    public interface ITeamStatsViewModel
     {
         List<TeamStatistics> TeamStatistics { get; set; }
     }

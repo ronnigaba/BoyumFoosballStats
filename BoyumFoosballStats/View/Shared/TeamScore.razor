@@ -1,7 +1,15 @@
 ﻿@using BoyumFoosballStats.Model.Enums
     @if (Team != null)
 {
-    <p>@GetTeamName()</p>
+    <div class="row">
+        <div class="col-12 d-flex align-items-center">
+            <RadzenLabel Text="@GetTeamName()"></RadzenLabel>
+            @if (!string.IsNullOrWhiteSpace(TeamNameBadgeText))
+            {
+                <RadzenBadge Text="@TeamNameBadgeText" BadgeStyle="@BadgeStyle"></RadzenBadge>
+            }
+        </div>
+    </div>
     <div class="row">
         <div class="col-12 d-flex align-items-center">
             <RadzenDropDown TValue="Player?" @bind-Value="Team.Attacker" Placeholder="Attacker" Data="@Players" Change="@TeamChangedInternal"></RadzenDropDown>
@@ -42,6 +50,12 @@
 
     [Parameter]
     public int Score { get; set; }
+
+    [Parameter]
+    public string? TeamNameBadgeText { get; set; }
+
+    [Parameter]
+    public BadgeStyle BadgeStyle { get; set; } = BadgeStyle.Info;
 
     [Parameter]
     public EventCallback<Team> TeamChanged { get; set; }

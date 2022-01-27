@@ -6,21 +6,14 @@
 <br />
 <div class="container">
     <div class="row">
-        <div class="col-6" style="background-color:lightgray">
-            @if (_viewModel.MatchPrediction != null)
-            {
-                <RadzenLabel Text="Match predictions" class="d-block"></RadzenLabel>
-                <RadzenLabel Text="@_viewModel.GetMatchPredictionText()" class="d-block"></RadzenLabel>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
+        <div class="col-12">
             <EditForm Model="_viewModel.Match" OnValidSubmit="@_viewModel.SaveScores">
                 <DataAnnotationsValidator />
-                <TeamScore @bind-Team="_viewModel.Match.Black" @bind-Score="_viewModel.Match.ScoreBlack" @bind-Score:event="ScoreChanged" OnTeamChanged="_viewModel.PredictMatch"></TeamScore>
+                <TeamScore @bind-Team="_viewModel.Match.Black" @bind-Score="_viewModel.Match.ScoreBlack" @bind-Score:event="ScoreChanged"
+                           TeamNameBadgeText="@_viewModel.GetMatchPredictionText(TableSide.Black)" OnTeamChanged="_viewModel.PredictMatch" BadgeStyle="@_viewModel.GetPredictionBadgeStyle(TableSide.Black)"></TeamScore>
                 <br />
-                <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged" OnTeamChanged="_viewModel.PredictMatch"></TeamScore>
+                <TeamScore @bind-Team="_viewModel.Match.Gray" @bind-Score="_viewModel.Match.ScoreGray" @bind-Score:event="ScoreChanged" BadgeStyle="@_viewModel.GetPredictionBadgeStyle(TableSide.Gray)"
+                           TeamNameBadgeText="@_viewModel.GetMatchPredictionText(TableSide.Gray)" OnTeamChanged="_viewModel.PredictMatch"></TeamScore>
                 <br />
                 <RadzenButton disabled="@_viewModel.SavingData" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Light">Save</RadzenButton>
                 <ValidationSummary />

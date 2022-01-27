@@ -1,5 +1,7 @@
 ﻿using BoyumFoosballStats.Helper;
 using BoyumFoosballStats.Model;
+using BoyumFoosballStats.Model.Enums;
+using Radzen;
 
 namespace BoyumFoosballStats.Viewmodel
 {
@@ -45,13 +47,23 @@ namespace BoyumFoosballStats.Viewmodel
             }
         }
 
-        public string GetMatchPredictionText()
+        public string? GetMatchPredictionText(TableSide side)
         {
             if (MatchPrediction == null || MatchPrediction.Length < 2)
             {
-                return "";
+                return null;
             }
-            return $"Black: {(MatchPrediction[1] * 100):0.##}% - Gray: {(MatchPrediction[0] * 100):0.##}%";
+            var arrayIndex = side == TableSide.Black ? 1: 0;
+            return $"{(MatchPrediction[arrayIndex] * 100):0.00}%";
+        }
+        public BadgeStyle GetPredictionBadgeStyle(TableSide side)
+        {
+            if (MatchPrediction == null || MatchPrediction.Length < 2)
+            {
+                return BadgeStyle.Info;
+            }
+            var arrayIndex = side == TableSide.Black ? 1: 0;
+            return (MatchPrediction[arrayIndex] * 100) >= 50 ? BadgeStyle.Success : BadgeStyle.Danger;
         }
 
         public async Task Reset()
@@ -75,6 +87,7 @@ namespace BoyumFoosballStats.Viewmodel
         void PredictMatch();
 
         Task Reset();
-        string GetMatchPredictionText();
+        string GetMatchPredictionText(TableSide side);
+        BadgeStyle GetPredictionBadgeStyle(TableSide side);
     }
 }

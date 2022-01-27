@@ -1,4 +1,4 @@
-﻿@page "/SeasonOverview";
+﻿@page "/";
 @inject ISeasonDashboardViewModel _viewModel;
 
 <h3>Season overview</h3>
@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-2">
-                <RadzenDropDown TValue="string" Placeholder="Filter by season" Data="@_viewModel.SeasonFilterOptions" @bind-Value=@_viewModel.SeasonFilterValue Change="@_viewModel.CalculateSeasonStats"></RadzenDropDown>
+                <RadzenDropDown TValue="string" AllowClear="true" Placeholder="All time" Data="@_viewModel.SeasonFilterOptions" @bind-Value=@_viewModel.SeasonFilterValue Change="@_viewModel.CalculateSeasonStats"></RadzenDropDown>
             </div>
         </div>
     </div>

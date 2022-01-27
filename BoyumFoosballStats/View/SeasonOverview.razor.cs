@@ -14,6 +14,7 @@ namespace BoyumFoosballStats.View
             _viewModel.analysisHelper = new MatchAnalysisHelper();
             _viewModel.blobHelper = new AzureBlobStorageHelper();
             var allMatches = await _viewModel.blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
+            _viewModel.AllMatches = allMatches;
             _viewModel.MatchesBySeason = _viewModel.analysisHelper.SortMatchesBySeason(allMatches);
             var viewModelMatchesBySeason = _viewModel.MatchesBySeason.OrderByDescending(x => x.Key).ToList();
             _viewModel.SeasonFilterOptions.Clear();

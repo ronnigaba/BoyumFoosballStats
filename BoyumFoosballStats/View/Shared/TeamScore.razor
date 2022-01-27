@@ -62,5 +62,6 @@
         var temp = Team.Attacker;
         Team.Attacker = Team.Defender;
         Team.Defender = temp;
+        OnTeamChanged.InvokeAsync();
     }
 }

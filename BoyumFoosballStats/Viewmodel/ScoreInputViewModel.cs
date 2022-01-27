@@ -35,6 +35,7 @@ namespace BoyumFoosballStats.Viewmodel
         public async void PredictMatch()
         {
             await Task.Delay(0);
+            MatchPrediction = null;
             if (Match.IsValid())
             {
                 var grayElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifier)?.EloRating ?? 0;

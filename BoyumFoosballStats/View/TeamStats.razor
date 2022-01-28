@@ -12,19 +12,11 @@
             <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
             <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
             <RadzenDataGridColumn TItem="TeamStatistics" Property="MatchesPlayed" Title="Matches played" Filterable="false" />
-            <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRate" Title="Win rate" Filterable="false">
-                <Template Context="data">
-                    @data.WinRate.ToString("0.##")%
-                </Template>
-            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRateFormatted" Title="Win rate" Filterable="false"/>
             <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalsScored" Title="Goals scored" Filterable="false"/>
             <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalsAgainst" Title="Goals against" Filterable="false"/>
             <RadzenDataGridColumn TItem="TeamStatistics" Property="GoalDifference" Title="Goal difference" Filterable="false"/>
-            <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRating" Title="Elo rating" Filterable="false">
-                <Template Context="data">
-                    @data.EloRating.ToString("0.###")
-                </Template>
-            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRatingFormatted" Title="Elo rating" Filterable="false"/>
         </Columns>
     </RadzenDataGrid>
 }

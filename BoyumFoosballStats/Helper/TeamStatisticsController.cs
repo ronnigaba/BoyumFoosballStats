@@ -1,4 +1,5 @@
 ﻿using BoyumFoosballStats.Model;
+using BoyumFoosballStats.Model.Enums;
 
 namespace BoyumFoosballStats.Helper
 {
@@ -41,6 +42,24 @@ namespace BoyumFoosballStats.Helper
             }
 
             return eloRatings;
+        }
+
+        //Experimental / WIP :p
+        public void CalculatePlayerElo(List<Match> matches)
+        {
+            var teamStats = CalculateTeamStats(matches);
+            Dictionary<string, decimal> defenderRatings = new Dictionary<string, decimal>();
+            Dictionary<string, decimal> attackerRatings = new Dictionary<string, decimal>();
+            foreach (var player in Enum.GetNames<Player>())
+            {
+                var defRating = teamStats.Where(x => x.Defender.Contains(player)).Sum(x => x.EloRating);
+                var atkRating = teamStats.Where(x => x.Attacker.Contains(player)).Sum(x => x.EloRating);
+                defenderRatings.Add(player, defRating);
+                attackerRatings.Add(player, atkRating);
+            }
+
+            var defRatingsList = defenderRatings.OrderByDescending(x => x.Value).ToList();
+            var atkRatingsList = attackerRatings.OrderByDescending(x => x.Value).ToList();
         }
 
         public double CalculateEloAccuracy(List<Match> matches, List<TeamStatistics>? teamStats = null, int kFactor = 15)

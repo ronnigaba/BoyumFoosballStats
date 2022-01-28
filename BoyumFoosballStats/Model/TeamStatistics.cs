@@ -15,6 +15,8 @@ namespace BoyumFoosballStats.Model
         [JsonIgnore] public double WinRate => (double)Wins / MatchesPlayed * 100;
         [JsonIgnore] public string Attacker => TeamIdentifier.Split(' ').First();
         [JsonIgnore] public string Defender => TeamIdentifier.Split(' ').Last();
+        [JsonIgnore] public string WinRateFormatted => WinRate.ToString("0.00");
+        [JsonIgnore] public string EloRatingFormatted => EloRating.ToString("0.00");
 
     }
 }

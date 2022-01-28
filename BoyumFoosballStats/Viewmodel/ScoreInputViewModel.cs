@@ -42,6 +42,11 @@ namespace BoyumFoosballStats.Viewmodel
             {
                 var grayElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifier)?.EloRating ?? 0;
                 var blackElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifier)?.EloRating ?? 0;
+
+                //ToDo - Inform about swapping in UI
+                //var grayEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifierSwapped)?.EloRating ?? 0;
+                //var blackEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifierSwapped)?.EloRating ?? 0;
+                
                 var prediction = EloHelper.PredictResult(grayElo, blackElo);
                 MatchPrediction = prediction;
             }

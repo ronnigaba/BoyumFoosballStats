@@ -12,5 +12,46 @@
         </div>
     </div>
 }
-<DashboardShared ViewModel="_viewModel"></DashboardShared>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-9">
+            <DashboardShared ViewModel="_viewModel"></DashboardShared>
+        </div>
+        <div class="col-3">
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top win streaks</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentStreak).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentStreak" Title="Streak"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+            }            
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top Elo ratings</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.EloRating).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRatingFormatted" Title="Rating"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+            }            
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top win rates (5+ matches)</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.Where(x=>x.MatchesPlayed > 5).OrderByDescending(x=>x.WinRate).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRateFormatted" Title="Win rate"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+            }
+        </div>
+    </div>
+</div>
 

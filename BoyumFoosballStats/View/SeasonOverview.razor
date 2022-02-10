@@ -1,7 +1,12 @@
 ﻿@page "/";
 @inject ISeasonDashboardViewModel _viewModel;
-
-<h3>Season overview</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>Season overview</h3>
+        </div>
+    </div>
+</div>
 @if (_viewModel.SeasonFilterOptions.Any())
 {
     <div class="container">
@@ -13,7 +18,7 @@
     </div>
 }
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-between">
         <div class="col-9">
             <DashboardShared ViewModel="_viewModel"></DashboardShared>
         </div>
@@ -23,33 +28,36 @@
                 <p>Top win streaks</p>
                 <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentStreak).Take(3)" TItem="TeamStatistics">
                     <Columns>
-                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentStreak" Title="Streak"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentStreak" Title="Streak" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>
                 </RadzenDataGrid>
-            }            
+                <br />
+            }
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
                 <p>Top Elo ratings</p>
                 <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.EloRating).Take(3)" TItem="TeamStatistics">
                     <Columns>
-                        <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRatingFormatted" Title="Rating"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="EloRatingFormatted" Title="Rating" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>
                 </RadzenDataGrid>
-            }            
+                <br />
+            }
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
                 <p>Top win rates (5+ matches)</p>
                 <RadzenDataGrid Data="_viewModel.TeamStatistics.Where(x=>x.MatchesPlayed > 5).OrderByDescending(x=>x.WinRate).Take(3)" TItem="TeamStatistics">
                     <Columns>
-                        <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRateFormatted" Title="Win rate"/>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRateFormatted" Title="Win rate" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>
                 </RadzenDataGrid>
+                <br />
             }
         </div>
     </div>

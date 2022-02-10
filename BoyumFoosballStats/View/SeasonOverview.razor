@@ -18,17 +18,29 @@
     </div>
 }
 <div class="container">
-    <div class="row justify-content-between">
+    <div class="row justify-content-center">
         <div class="col-9">
             <DashboardShared ViewModel="_viewModel"></DashboardShared>
         </div>
         <div class="col-3">
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
-                <p>Top win streaks</p>
+                <p>Top win streaks (active)</p>
                 <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentStreak).Take(3)" TItem="TeamStatistics">
                     <Columns>
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentStreak" Title="Streak" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+                <br />
+            }            
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top win streaks (highest)</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.HIghestStreak).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="HIghestStreak" Title="Streak" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>

@@ -11,6 +11,8 @@ namespace BoyumFoosballStats.Model
         public int MatchesPlayed { get; set; }
         public int Wins { get; set; }
         public int Losses{ get; set; }
+        public int CurrentStreak{ get; set; }
+        public int HIghestStreak { get; set; }
         [JsonIgnore] public int GoalDifference => GoalsScored - GoalsAgainst;
         [JsonIgnore] public double WinRate => (double)Wins / MatchesPlayed * 100;
         [JsonIgnore] public string Attacker => TeamIdentifier.Split(' ').First();

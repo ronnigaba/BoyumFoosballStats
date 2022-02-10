@@ -29,6 +29,12 @@ namespace BoyumFoosballStats.Helper
                 winningTeamStats.GoalsAgainst += match.LosingScore;
                 winningTeamStats.MatchesPlayed++;
                 winningTeamStats.Wins++;
+                winningTeamStats.CurrentStreak++;
+                winningTeamStats.HIghestStreak = winningTeamStats.CurrentStreak > winningTeamStats.HIghestStreak
+                    ? winningTeamStats.CurrentStreak
+                    : winningTeamStats.HIghestStreak;
+
+
                 if (losingTeamStats == null)
                 {
                     eloRatings.Add(new TeamStatistics { TeamIdentifier = losingIdentifier });
@@ -39,6 +45,7 @@ namespace BoyumFoosballStats.Helper
                 losingTeamStats.GoalsAgainst += match.WinningScore;
                 losingTeamStats.MatchesPlayed++;
                 losingTeamStats.Losses++;
+                losingTeamStats.CurrentStreak = 0;
             }
 
             return eloRatings;

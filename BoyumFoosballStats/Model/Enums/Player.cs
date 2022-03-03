@@ -12,6 +12,8 @@
         Henrik = 7,
         Kim = 8,
         Maria = 9,
-        Cristian
+        Cristian = 10,
+        Alex = 11,
+        Paul = 12
     }
 }

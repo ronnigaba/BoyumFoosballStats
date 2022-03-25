@@ -10,7 +10,7 @@
 @if (_viewModel.SeasonFilterOptions.Any())
 {
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-12">
                 <RadzenDropDown TValue="string" AllowClear="true" Placeholder="All time" Data="@_viewModel.SeasonFilterOptions" @bind-Value=@_viewModel.SeasonFilterValue Change="@_viewModel.CalculateSeasonStats"></RadzenDropDown>
             </div>

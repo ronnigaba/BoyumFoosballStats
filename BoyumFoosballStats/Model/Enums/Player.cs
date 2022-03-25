@@ -11,6 +11,9 @@
         Jacob = 6,
         Henrik = 7,
         Kim = 8,
-        Maria = 9
+        Maria = 9,
+        Cristian = 10,
+        Alex = 11,
+        Paul = 12
     }
 }

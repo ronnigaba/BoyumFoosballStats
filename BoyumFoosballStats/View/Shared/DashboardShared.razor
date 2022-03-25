@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="@GenerateColClasses()">
                 @if (!ShowWinrateDrillDownChart && ViewModel.OverallWinrates != null && ViewModel.OverallWinrates.Any())
                 {
                     <RadzenChart SeriesClick="@OnOverallWinrateSeriesClick">
@@ -30,7 +30,7 @@
                     </RadzenChart>
                 }
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="@GenerateColClasses()">
                 @if (!ShowMatchesPlayedDrillDownChart && ViewModel.OverallMatchesPlayed != null && ViewModel.OverallMatchesPlayed.Any())
                 {
                     <RadzenChart SeriesClick="@OnOverallMatchesPlayedSeriesClick">
@@ -55,7 +55,7 @@
         <div class="row justify-content-center">
             @if (ViewModel.TableSideWinRates != null && ViewModel.TableSideWinRates.Any())
             {
-                <div class="col-6">
+                <div class="@GenerateColClasses()">
                     <RadzenChart>
                         <RadzenPieSeries Data="@ViewModel.TableSideWinRates" Title="Win rate (%)" CategoryProperty="Key" ValueProperty="Value" />
                         <RadzenLegend Position="LegendPosition.Bottom" />
@@ -64,7 +64,7 @@
             }
             @if (ViewModel.TeamWinrates != null && ViewModel.TeamWinrates.Any())
             {
-                <div class="col-6">
+                <div class="@GenerateColClasses()">
                     <RadzenChart>
                         <RadzenBarSeries Data="@ViewModel.TeamWinrates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate (%)" />
                         <RadzenLegend Position="LegendPosition.Bottom" />

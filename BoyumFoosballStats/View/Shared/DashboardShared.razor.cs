@@ -39,5 +39,10 @@ namespace BoyumFoosballStats.View.Shared
             ViewModel.DrillDownDefenderMatchesPlayed = null;
             ShowMatchesPlayedDrillDownChart = false;
         }
+
+        private string GenerateColClasses()
+        {
+            return "col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6";
+        }
     }
 }

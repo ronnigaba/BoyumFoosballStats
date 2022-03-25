@@ -8,7 +8,7 @@ namespace BoyumFoosballStats.Helper
         {
             var calendar = new GregorianCalendar();
             var currentWeekByDate = calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
-            return $"{date.Year} {currentWeekByDate}";
+            return $"{date.Year}/{currentWeekByDate.ToString("00")}";
         }
     }
 }

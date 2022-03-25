@@ -26,7 +26,7 @@ namespace BoyumFoosballStats.Viewmodel
             var weeklyMatchesPlayed = new Dictionary<string, int>();
             foreach (var group in MatchesByDate)
             {
-                var week = $"Week {@group.Key}";
+                var week = $"{@group.Key}";
                 var matches = group.ToList();
                 var winRate = analysisHelper.CalculateWinRate(matches, player);
                 if (!double.IsNaN(winRate))

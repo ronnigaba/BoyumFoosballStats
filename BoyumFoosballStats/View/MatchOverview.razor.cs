@@ -41,7 +41,7 @@ namespace BoyumFoosballStats.View
                 return;
             }
             Matches.Remove(match);
-            await blobHelper.RemoveEntry<Match>(match, AzureBlobStorageHelper.DefaultMatchesFileName);
+            await blobHelper.UploadList(Matches, AzureBlobStorageHelper.DefaultMatchesFileName, true);
             await dataGrid.Reload();
         }
     }

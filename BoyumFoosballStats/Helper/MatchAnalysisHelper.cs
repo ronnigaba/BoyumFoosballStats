@@ -62,7 +62,7 @@ namespace BoyumFoosballStats.Helper
         {
             var result = new Dictionary<string, double>();
             var values = Enum.GetValues(typeof(Player)).Cast<Player>();
-            var combinations = CollectionCombinationHelper.GetCombinations<Player>(values, 2);
+            var combinations = CollectionCombinationHelper.GetUniqueCombinations<Player>(values, 2);
             var teamCombinations = combinations.ToList();
             foreach (var team in teamCombinations)
             {

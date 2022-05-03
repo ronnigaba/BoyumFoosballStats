@@ -46,7 +46,7 @@ namespace BoyumFoosballStats.Viewmodel
                 //ToDo - Inform about swapping in UI
                 //var grayEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifierSwapped)?.EloRating ?? 0;
                 //var blackEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifierSwapped)?.EloRating ?? 0;
-                
+
                 var prediction = EloHelper.PredictResult(grayElo, blackElo);
                 MatchPrediction = prediction;
             }
@@ -58,7 +58,7 @@ namespace BoyumFoosballStats.Viewmodel
             {
                 return null;
             }
-            var arrayIndex = side == TableSide.Black ? 1: 0;
+            var arrayIndex = side == TableSide.Black ? 1 : 0;
             return $"{(MatchPrediction[arrayIndex] * 100):0.00}%";
         }
         public BadgeStyle GetPredictionBadgeStyle(TableSide side)
@@ -67,7 +67,7 @@ namespace BoyumFoosballStats.Viewmodel
             {
                 return BadgeStyle.Info;
             }
-            var arrayIndex = side == TableSide.Black ? 1: 0;
+            var arrayIndex = side == TableSide.Black ? 1 : 0;
             return (MatchPrediction[arrayIndex] * 100) >= 50 ? BadgeStyle.Success : BadgeStyle.Danger;
         }
 

@@ -38,6 +38,18 @@ namespace BoyumFoosballStats.Model
         [JsonIgnore]
         public int LosingScore => ScoreBlack > ScoreGray ? ScoreGray : ScoreBlack;
         
+        public bool PlayedOnSameTeam(Player player1, Player player2)
+        {
+            return (Black.Players.Contains(player1) && Black.Players.Contains(player2)) ||
+                   (Gray.Players.Contains(player1) && Gray.Players.Contains(player2));
+        }
+
+        public bool PlayedOnOpposingTeams(Player player1, Player player2)
+        {
+            return (Black.Players.Contains(player1) && Gray.Players.Contains(player2)) ||
+                   (Gray.Players.Contains(player1) && Black.Players.Contains(player2));
+        }
+        
         public bool IsValid()
         {
             var players = new List<Player?>() { Black.Attacker, Black.Defender, Gray.Attacker, Gray.Defender };

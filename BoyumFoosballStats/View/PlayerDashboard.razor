@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-2">
-            <RadzenDropDown TValue="Player" Placeholder="Filter by player" Data="@_viewModel.PlayerFilterOption" Change="@_viewModel.CalculateWeeklyStats"></RadzenDropDown>
+            <RadzenDropDown TValue="Player" Placeholder="Filter by player" Data="@_viewModel.PlayerFilterOption" Change="@_viewModel.CalculateStats"></RadzenDropDown>
         </div>
     </div>
     <div class="row">
@@ -35,6 +35,16 @@
                     <RadzenValueAxis Min="0">
                         <RadzenGridLines Visible="true" />
                     </RadzenValueAxis>
+                </RadzenChart>
+            </div>
+        }
+        @if (_viewModel.WinRatesByTeammate != null && _viewModel.WinRatesByTeammate.Any())
+        {
+            <div class="col-sm-12 col-md-6">
+                <RadzenChart>
+                    <RadzenBarSeries Data="@_viewModel.WinRatesByTeammate.OrderBy(x=>x.Value)" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by team mate(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
                 </RadzenChart>
             </div>
         }

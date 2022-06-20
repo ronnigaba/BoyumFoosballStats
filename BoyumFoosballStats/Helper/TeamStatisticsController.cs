@@ -29,10 +29,11 @@ namespace BoyumFoosballStats.Helper
                 winningTeamStats.GoalsAgainst += match.LosingScore;
                 winningTeamStats.MatchesPlayed++;
                 winningTeamStats.Wins++;
-                winningTeamStats.CurrentStreak++;
-                winningTeamStats.HIghestStreak = winningTeamStats.CurrentStreak > winningTeamStats.HIghestStreak
-                    ? winningTeamStats.CurrentStreak
-                    : winningTeamStats.HIghestStreak;
+                winningTeamStats.CurrentWinningStreak++;
+                winningTeamStats.CurrentLosingStreak = 0;
+                winningTeamStats.HIghestWinningStreak = winningTeamStats.CurrentWinningStreak > winningTeamStats.HIghestWinningStreak
+                    ? winningTeamStats.CurrentWinningStreak
+                    : winningTeamStats.HIghestWinningStreak;
 
 
                 if (losingTeamStats == null)
@@ -45,7 +46,11 @@ namespace BoyumFoosballStats.Helper
                 losingTeamStats.GoalsAgainst += match.WinningScore;
                 losingTeamStats.MatchesPlayed++;
                 losingTeamStats.Losses++;
-                losingTeamStats.CurrentStreak = 0;
+                losingTeamStats.CurrentLosingStreak++;
+                losingTeamStats.CurrentWinningStreak = 0;
+                losingTeamStats.HIghestLosingStreak = losingTeamStats.CurrentLosingStreak > losingTeamStats.HIghestLosingStreak
+                    ? losingTeamStats.CurrentLosingStreak
+                    : losingTeamStats.HIghestLosingStreak;
             }
 
             return eloRatings;

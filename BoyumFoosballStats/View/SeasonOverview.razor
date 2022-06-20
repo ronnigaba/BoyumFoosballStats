@@ -26,9 +26,9 @@
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
                 <p>Top win streaks (active)</p>
-                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentStreak).Take(3)" TItem="TeamStatistics">
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentWinningStreak).Take(3)" TItem="TeamStatistics">
                     <Columns>
-                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentStreak" Title="Streak" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentWinningStreak" Title="Streak" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>
@@ -38,9 +38,33 @@
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
                 <p>Top win streaks (highest)</p>
-                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.HIghestStreak).Take(3)" TItem="TeamStatistics">
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.HIghestWinningStreak).Take(3)" TItem="TeamStatistics">
                     <Columns>
-                        <RadzenDataGridColumn TItem="TeamStatistics" Property="HIghestStreak" Title="Streak" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="HIghestWinningStreak" Title="Streak" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+                <br />
+            }
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top losing streaks (active)</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.CurrentLosingStreak).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="CurrentLosingStreak" Title="Streak" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
+                    </Columns>
+                </RadzenDataGrid>
+                <br />
+            }            
+            @if (_viewModel != null && _viewModel.TeamStatistics.Any())
+            {
+                <p>Top losing streaks (highest)</p>
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.OrderByDescending(x=>x.HIghestLosingStreak).Take(3)" TItem="TeamStatistics">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamStatistics" Property="HIghestLosingStreak" Title="Streak" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Defender" Title="Defender" />
                     </Columns>

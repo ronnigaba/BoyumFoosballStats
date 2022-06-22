@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace BoyumFoosballStats.Helper
+namespace BoyumFoosballStats.Controller
 {
     public static class DateHelper
     {

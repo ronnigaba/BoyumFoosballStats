@@ -1,4 +1,4 @@
-﻿using BoyumFoosballStats.Helper;
+﻿using BoyumFoosballStats.Controller;
 using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
 using Radzen;

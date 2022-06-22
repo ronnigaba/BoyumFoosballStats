@@ -22,5 +22,9 @@ namespace BoyumFoosballStats.Model
         [JsonIgnore] public string WinRateFormatted => WinRate.ToString("0.00");
         [JsonIgnore] public string EloRatingFormatted => EloRating.ToString("0.00");
 
+        [JsonIgnore] public double GoalsAgainstPerMatch => (double)GoalsAgainst / MatchesPlayed;
+        [JsonIgnore] public double GoalsScoredPerMatch => (double)GoalsScored / MatchesPlayed;
+        [JsonIgnore] public double GoalDifferencePerMatch => (double)GoalDifference / MatchesPlayed;
+
     }
 }

@@ -27,17 +27,13 @@ namespace BoyumFoosballStats.Model
 
         public DateTime MatchDate { get; set; }
 
-        [JsonIgnore]
-        public Team WinningTeam => ScoreBlack > ScoreGray ? Black : Gray;
+        [JsonIgnore] public Team WinningTeam => ScoreBlack > ScoreGray ? Black : Gray;
 
-        [JsonIgnore]
-        public Team LosingTeam => ScoreBlack > ScoreGray ? Gray : Black;
+        [JsonIgnore] public Team LosingTeam => ScoreBlack > ScoreGray ? Gray : Black;
 
-        [JsonIgnore]
-        public int WinningScore => ScoreBlack > ScoreGray ? ScoreBlack : ScoreGray;
-        [JsonIgnore]
-        public int LosingScore => ScoreBlack > ScoreGray ? ScoreGray : ScoreBlack;
-        
+        [JsonIgnore] public int WinningScore => ScoreBlack > ScoreGray ? ScoreBlack : ScoreGray;
+        [JsonIgnore] public int LosingScore => ScoreBlack > ScoreGray ? ScoreGray : ScoreBlack;
+
         public bool PlayedOnSameTeam(Player player1, Player player2)
         {
             return (Black.Players.Contains(player1) && Black.Players.Contains(player2)) ||
@@ -49,7 +45,25 @@ namespace BoyumFoosballStats.Model
             return (Black.Players.Contains(player1) && Gray.Players.Contains(player2)) ||
                    (Gray.Players.Contains(player1) && Black.Players.Contains(player2));
         }
-        
+
+        public bool WasPlayerInMatch(Player player)
+        {
+            return Gray.Players.Any(x => x == player) || Black.Players.Any(x => x == player);
+        }
+
+
+        public bool WasPlayerDefenderInMatch(Player player)
+        {
+            return Gray.Defender == player || Black.Defender == player;
+        }
+
+
+        public bool WasPlayerAttackerInMatch(Player player)
+        {
+            return Gray.Attacker == player || Black.Attacker == player;
+        }
+
+
         public bool IsValid()
         {
             var players = new List<Player?>() { Black.Attacker, Black.Defender, Gray.Attacker, Gray.Defender };
@@ -57,6 +71,7 @@ namespace BoyumFoosballStats.Model
             {
                 return false;
             }
+
             return true;
         }
     }

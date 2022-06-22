@@ -1,7 +1,7 @@
 ﻿using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
 
-namespace BoyumFoosballStats.Helper
+namespace BoyumFoosballStats.Controller
 {
     public class MatchAnalysisHelper
     {

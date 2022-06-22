@@ -1,4 +1,4 @@
-﻿using BoyumFoosballStats.Helper;
+﻿using BoyumFoosballStats.Controller;
 using BoyumFoosballStats.Model;
 using Microsoft.AspNetCore.Components;
 

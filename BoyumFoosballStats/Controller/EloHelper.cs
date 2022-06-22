@@ -1,4 +1,4 @@
-﻿namespace BoyumFoosballStats.Helper;
+﻿namespace BoyumFoosballStats.Controller;
 
 public class EloHelper
 {

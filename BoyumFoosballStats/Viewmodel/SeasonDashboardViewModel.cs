@@ -1,4 +1,4 @@
-﻿using BoyumFoosballStats.Helper;
+﻿using BoyumFoosballStats.Controller;
 using BoyumFoosballStats.Model;
 
 namespace BoyumFoosballStats.Viewmodel
@@ -7,11 +7,11 @@ namespace BoyumFoosballStats.Viewmodel
     {
         public List<Match>? AllMatches { get; set; }
         public IEnumerable<IGrouping<string, Match>>? MatchesBySeason { get; set; }
-        public List<string> SeasonFilterOptions { get; set; } = new List<string>();
+        public List<string> SeasonFilterOptions { get; set; } = new();
         public string? SeasonFilterValue { get; set; }
-        public List<TeamStatistics> TeamStatistics { get; set; } = new List<TeamStatistics>();
+        public List<TeamStatistics> TeamStatistics { get; set; } = new();
 
-        private TeamStatisticsController _teamStatisticsController = new TeamStatisticsController();
+        private TeamStatisticsController _teamStatisticsController = new();
 
         public void CalculateSeasonStats(object value)
         {

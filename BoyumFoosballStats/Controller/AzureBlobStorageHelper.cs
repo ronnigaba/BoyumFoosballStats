@@ -1,14 +1,13 @@
 ﻿using System.Text.Json;
 using Azure.Storage.Blobs;
-using BoyumFoosballStats.Model;
 
-namespace BoyumFoosballStats.Helper
+namespace BoyumFoosballStats.Controller
 {
     public class AzureBlobStorageHelper
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-#if DEBUG
+#if !DEBUG
         public static string DefaultMatchesFileName = "matches_debug.json";
         public static string DefaultEloFileName = "elo_debug.json";
 #else

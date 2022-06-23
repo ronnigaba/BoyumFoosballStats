@@ -1,6 +1,7 @@
 ﻿using BoyumFoosballStats.Controller;
 using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
+using BoyumFoosballStats_Ai;
 using Radzen;
 
 namespace BoyumFoosballStats.Viewmodel
@@ -13,8 +14,10 @@ namespace BoyumFoosballStats.Viewmodel
         public List<TeamStatistics>? EloRatings { get; set; }
         public Match Match { get; set; } = new Match();
         public bool SavingData { get; set; }
-        public decimal[]? MatchPrediction { get; set; }
-
+        public decimal[]? MatchPredictionElo { get; set; }
+        public float[] MatchPredictionAi { get; set; }
+        private EloController _eloController = new();
+        private MatchOutcomeModel matchOutcomeModel = new();
         public async Task SaveScores()
         {
             SavingData = true;
@@ -37,7 +40,7 @@ namespace BoyumFoosballStats.Viewmodel
         public async void PredictMatch()
         {
             await Task.Delay(0);
-            MatchPrediction = null;
+            MatchPredictionElo = null;
             if (Match.IsValid())
             {
                 var grayElo = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifier)?.EloRating ?? 0;
@@ -46,29 +49,42 @@ namespace BoyumFoosballStats.Viewmodel
                 //ToDo - Inform about swapping in UI
                 //var grayEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Gray.TeamIdentifierSwapped)?.EloRating ?? 0;
                 //var blackEloSwapped = EloRatings?.SingleOrDefault(x => x.TeamIdentifier == Match.Black.TeamIdentifierSwapped)?.EloRating ?? 0;
+                var sampleData = new MatchOutcomeModel.ModelInput
+                {
+                    GrayDefender = (float)Match.Gray.Defender,
+                    GrayAttacker = (float)Match.Gray.Attacker,
+                    BlackDefender = (float)Match.Black.Defender,
+                    BlackAttacker = (float)Match.Black.Attacker,
+                };
 
-                var prediction = EloHelper.PredictResult(grayElo, blackElo);
-                MatchPrediction = prediction;
+                //Load model and predict output
+                var result = await matchOutcomeModel.Predict(sampleData);
+                var blackChance = 100 - result.Score * 100;
+                var grayChance = 0 + result.Score * 100;
+                var prediction = _eloController.PredictResult(grayElo, blackElo);
+                MatchPredictionAi = new[] { grayChance, blackChance };
+                MatchPredictionElo = prediction;
             }
         }
 
+
         public string? GetMatchPredictionText(TableSide side)
         {
-            if (MatchPrediction == null || MatchPrediction.Length < 2)
+            if (MatchPredictionElo == null || MatchPredictionElo.Length < 2)
             {
                 return null;
             }
             var arrayIndex = side == TableSide.Black ? 1 : 0;
-            return $"{(MatchPrediction[arrayIndex] * 100):0.00}%";
+            return $"Elo: {(MatchPredictionElo[arrayIndex] * 100):0.00}% | Ai: {(MatchPredictionAi[arrayIndex]):0.00}%";
         }
         public BadgeStyle GetPredictionBadgeStyle(TableSide side)
         {
-            if (MatchPrediction == null || MatchPrediction.Length < 2)
+            if (MatchPredictionElo == null || MatchPredictionElo.Length < 2 || MatchPredictionAi == null || MatchPredictionAi.Length < 2)
             {
                 return BadgeStyle.Info;
             }
             var arrayIndex = side == TableSide.Black ? 1 : 0;
-            return (MatchPrediction[arrayIndex] * 100) >= 50 ? BadgeStyle.Success : BadgeStyle.Danger;
+            return (MatchPredictionElo[arrayIndex] * 100) >= 50 ? BadgeStyle.Success : BadgeStyle.Danger;
         }
 
         public async Task Reset()
@@ -87,7 +103,7 @@ namespace BoyumFoosballStats.Viewmodel
         List<TeamStatistics>? EloRatings { get; set; }
         Match Match { get; set; }
         bool SavingData { get; set; }
-        decimal[]? MatchPrediction { get; set; }
+        decimal[]? MatchPredictionElo { get; set; }
         Task SaveScores();
         void PredictMatch();
 

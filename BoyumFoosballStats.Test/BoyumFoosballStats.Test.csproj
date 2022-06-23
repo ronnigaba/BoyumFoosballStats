@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <Platforms>AnyCPU;x64;x86</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BoyumFoosballStats.Ai\BoyumFoosballStats.Ai.csproj" />
+      <ProjectReference Include="..\BoyumFoosballStats.BlobStorage\BoyumFoosballStats.BlobStorage.csproj" />
       <ProjectReference Include="..\BoyumFoosballStats\BoyumFoosballStats.csproj" />
     </ItemGroup>
 

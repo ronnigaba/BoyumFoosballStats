@@ -5,6 +5,8 @@ namespace BoyumFoosballStats.Controller
 {
     public class TeamStatisticsController
     {
+        private readonly EloController _eloController = new();
+
         public List<TeamStatistics> CalculateTeamStats(List<Match> matches, int kFactor = 15)
         {
             var eloRatings = new List<TeamStatistics>();
@@ -18,7 +20,7 @@ namespace BoyumFoosballStats.Controller
                 var winningTeamStats = eloRatings.SingleOrDefault(x => x.TeamIdentifier == winningIdentifier);
                 var winningElo = winningTeamStats?.EloRating ?? 0;
 
-                var newElo = EloHelper.CalculateElo(winningElo, losingElo, (decimal)EloHelper.WIN, (decimal)EloHelper.LOSE, kFactor);
+                var newElo = _eloController.CalculateElo(winningElo, losingElo, (decimal)EloController.WIN, (decimal)EloController.LOSE, kFactor);
                 if (winningTeamStats == null)
                 {
                     eloRatings.Add(new TeamStatistics { TeamIdentifier = winningIdentifier });
@@ -70,7 +72,7 @@ namespace BoyumFoosballStats.Controller
                 var losingElo = losingRating?.EloRating ?? 0;
                 var winningRating = teamStats.SingleOrDefault(x => x.TeamIdentifier == match.WinningTeam.TeamIdentifier);
                 var winningElo = winningRating?.EloRating ?? 0;
-                var prediction = EloHelper.PredictResult(winningElo, losingElo);
+                var prediction = _eloController.PredictResult(winningElo, losingElo);
                 if (prediction[0] > prediction[1])
                 {
                     expectedWins++;

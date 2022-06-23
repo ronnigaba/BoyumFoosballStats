@@ -63,6 +63,9 @@ namespace BoyumFoosballStats.Model
             return Gray.Attacker == player || Black.Attacker == player;
         }
 
+        public TableSide WinningSide => ScoreBlack > ScoreGray ? TableSide.Black : TableSide.Gray;
+        
+        public TableSide LosingSide => ScoreBlack > ScoreGray ? TableSide.Gray : TableSide.Black;
 
         public bool IsValid()
         {

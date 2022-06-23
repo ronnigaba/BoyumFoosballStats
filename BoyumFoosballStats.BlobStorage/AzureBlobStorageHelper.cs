@@ -7,7 +7,7 @@ namespace BoyumFoosballStats.Controller
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-#if !DEBUG
+#if DEBUG
         public static string DefaultMatchesFileName = "matches_debug.json";
         public static string DefaultEloFileName = "elo_debug.json";
 #else
@@ -62,6 +62,19 @@ namespace BoyumFoosballStats.Controller
             entries.Remove(entry);
             await UploadList(entries, DefaultMatchesFileName, true);
             return entries;
+        }
+
+        public async Task<Stream?> GetFileStream(string fileName)
+        {
+            BlobClient blobClient = GetBlobClient(containerName, fileName);
+
+            if (await blobClient.ExistsAsync())
+            {
+                var blobResult = await blobClient.DownloadContentAsync();
+                return blobResult.Value.Content.ToStream();
+            }
+
+            return null;
         }
 
         private BlobClient GetBlobClient(string containerName, string fileName)

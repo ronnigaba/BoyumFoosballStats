@@ -34,13 +34,20 @@ namespace BoyumFoosballStats.Viewmodel
         {
             var players = Enum.GetNames<Player>();
             var weekdays = Enum.GetNames<DayOfWeek>();
-            WinRateByTeammate = playerStats.WinRateByTeammate.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Value).ToDictionary(x => players[(int)x.Key], x => x.Value);
-            WinRateByOpponent = playerStats.WinRateByOpponent.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Value).ToDictionary(x => players[(int)x.Key], x => x.Value);
-            WinRateByWeekday = playerStats.WinRateByWeekday.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Key).ToDictionary(x => weekdays[(int)x.Key], x => x.Value);
-            
-            var idealOpponents = playerStats.WinRateByOpponent.OrderByDescending(x => x.Value).Take(2).ToList();
-            IdealMatchAdvice = $"The ideal match for {playerStats.Player} is played on a {playerStats.WinRateByWeekday.MaxBy(x=>x.Value).Key} " +
-                               $"with teammate {playerStats.WinRateByTeammate.MaxBy(x=>x.Value).Key} against {idealOpponents.First().Key} and {idealOpponents.Last().Key}";
+            WinRateByTeammate = playerStats.WinRateByTeammate.Where(x => !double.IsNaN(x.Value)).OrderBy(x => x.Value)
+                .ToDictionary(x => players[(int)x.Key], x => x.Value);
+            WinRateByOpponent = playerStats.WinRateByOpponent.Where(x => !double.IsNaN(x.Value)).OrderBy(x => x.Value)
+                .ToDictionary(x => players[(int)x.Key], x => x.Value);
+            WinRateByWeekday = playerStats.WinRateByWeekday.Where(x => !double.IsNaN(x.Value)).OrderBy(x => x.Key)
+                .ToDictionary(x => weekdays[(int)x.Key], x => x.Value);
+
+            var idealTeammate = playerStats.WinRateByTeammate.MaxBy(x => x.Value).Key;
+            var idealOpponents = playerStats.WinRateByOpponent.Where(x => x.Key != idealTeammate)
+                .OrderByDescending(x => x.Value).Take(2).ToList();
+
+            IdealMatchAdvice =
+                $"The ideal match for {playerStats.Player} is played on a {playerStats.WinRateByWeekday.MaxBy(x => x.Value).Key} " +
+                $"with teammate {idealTeammate} against {idealOpponents.First().Key} and {idealOpponents.Last().Key}";
         }
     }
 

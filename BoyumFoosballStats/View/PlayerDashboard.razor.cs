@@ -11,7 +11,6 @@ namespace BoyumFoosballStats.View
         {
             await base.OnInitializedAsync();
             _viewModel.PlayerFilterOption = Enum.GetValues<Player>().ToList();
-            _viewModel.analysisHelper = new MatchAnalysisHelper();
             _viewModel.blobHelper = new AzureBlobStorageHelper();
             _viewModel.Matches = await _viewModel.blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
         }

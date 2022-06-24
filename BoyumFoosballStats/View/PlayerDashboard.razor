@@ -8,45 +8,70 @@
             <RadzenDropDown TValue="Player" Placeholder="Filter by player" Data="@_viewModel.PlayerFilterOption" Change="@_viewModel.CalculateStats"></RadzenDropDown>
         </div>
     </div>
+    <div class="row justify-content-center">
+        @_viewModel.IdealMatchAdvice
+    </div>
     <div class="row">
-        @if (_viewModel.WeeklyWinRates != null && _viewModel.WeeklyWinRates.Any())
+        @if (_viewModel.CurrentPlayerStats != null)
         {
-            <div class="col-sm-12 col-md-6">
-                <RadzenChart>
-                    <RadzenLineSeries Data="@_viewModel.WeeklyWinRates" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by week (%)">
-                        <RadzenMarkers MarkerType="MarkerType.Diamond" />
-                    </RadzenLineSeries>
-                    <RadzenLegend Position="LegendPosition.Bottom" />
-                    <RadzenValueAxis Min="0" Step="5">
-                        <RadzenGridLines Visible="true" />
-                    </RadzenValueAxis>
-                    <RadzenCategoryAxis Padding="20" />
-                </RadzenChart>
-            </div>
-        }
-        @if (_viewModel.WeeklyMatchesPlayed != null && _viewModel.WeeklyMatchesPlayed.Any())
-        {
-            <div class="col-sm-12 col-md-6">
-                <RadzenChart>
-                    <RadzenLineSeries Data="@_viewModel.WeeklyMatchesPlayed" CategoryProperty="Key" ValueProperty="Value" Title="Matches played by week">
-                        <RadzenMarkers MarkerType="MarkerType.Diamond" />
-                    </RadzenLineSeries>
-                    <RadzenLegend Position="LegendPosition.Bottom" />
-                    <RadzenValueAxis Min="0">
-                        <RadzenGridLines Visible="true" />
-                    </RadzenValueAxis>
-                </RadzenChart>
-            </div>
-        }
-        @if (_viewModel.WinRatesByTeammate != null && _viewModel.WinRatesByTeammate.Any())
-        {
-            <div class="col-sm-12 col-md-6">
-                <RadzenChart>
-                    <RadzenBarSeries Data="@_viewModel.WinRatesByTeammate.OrderBy(x=>x.Value)" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by team mate(%)" />
-                        <RadzenLegend Position="LegendPosition.Bottom" />
-                        <RadzenValueAxis Min="0" Step="5" />
-                </RadzenChart>
-            </div>
+            @if (_viewModel.CurrentPlayerStats.WeeklyWinRates.Any())
+            {
+                <div class="col-sm-12 col-md-4">
+                    <RadzenChart>
+                        <RadzenLineSeries Data="@_viewModel.CurrentPlayerStats.WeeklyWinRates.Where(x => !double.IsNaN(x.Value))" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by week (%)">
+                            <RadzenMarkers MarkerType="MarkerType.Diamond"/>
+                        </RadzenLineSeries>
+                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenValueAxis Min="0" Step="5">
+                            <RadzenGridLines Visible="true"/>
+                        </RadzenValueAxis>
+                        <RadzenCategoryAxis Padding="20"/>
+                    </RadzenChart>
+                </div>
+            }
+            @if (_viewModel.CurrentPlayerStats.WeeklyMatchesPlayed.Any())
+            {
+                <div class="col-sm-12 col-md-4">
+                    <RadzenChart>
+                        <RadzenLineSeries Data="@_viewModel.CurrentPlayerStats.WeeklyMatchesPlayed.Where(x => !double.IsNaN(x.Value))" CategoryProperty="Key" ValueProperty="Value" Title="Matches played by week">
+                            <RadzenMarkers MarkerType="MarkerType.Diamond"/>
+                        </RadzenLineSeries>
+                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenValueAxis Min="0">
+                            <RadzenGridLines Visible="true"/>
+                        </RadzenValueAxis>
+                    </RadzenChart>
+                </div>
+            }
+            @if (_viewModel.WinRateByWeekday.Any())
+            {
+                <div class="col-sm-12 col-md-4">
+                    <RadzenChart>
+                        <RadzenColumnSeries Data="@_viewModel.WinRateByWeekday" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by weekday(%)"/>
+                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                    </RadzenChart>
+                </div>
+            }
+            @if (_viewModel.WinRateByTeammate.Any())
+            {
+                <div class="col-sm-12 col-md-6">
+                    <RadzenChart>
+                        <RadzenBarSeries Data="@_viewModel.WinRateByTeammate" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by teammate(%)"/>
+                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenValueAxis Min="0" Step="5"/>
+                    </RadzenChart>
+                </div>
+            }
+            @if (_viewModel.WinRateByOpponent.Any())
+            {
+                <div class="col-sm-12 col-md-6">
+                    <RadzenChart>
+                        <RadzenBarSeries Data="@_viewModel.WinRateByOpponent" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by opponent(%)"/>
+                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenValueAxis Min="0" Step="5"/>
+                    </RadzenChart>
+                </div>
+            }
         }
     </div>
 </div>

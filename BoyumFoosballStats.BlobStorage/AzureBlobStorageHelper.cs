@@ -7,16 +7,13 @@ namespace BoyumFoosballStats.Controller
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-#if DEBUG
-        public static string DefaultMatchesFileName = "matches_debug.json";
-        public static string DefaultEloFileName = "elo_debug.json";
-#else
+        public static string DEBUG_DefaultMatchesFileName = "matches_debug.json";
         public static string DefaultMatchesFileName = "matches.json";
         public static string DefaultEloFileName = "elo.json";
-#endif
 
         private readonly string blobSasUrl =
             "https://boyumfoosballstorage.blob.core.windows.net/foosballmatches?sp=racwdli&st=2021-11-11T19:06:13Z&se=2099-11-12T03:06:13Z&sv=2020-08-04&sr=c&sig=d%2Fa9iPG41lR54QcBwi1Cy16PVfUac7D2oPTi4ZDQVC0%3D";
+
         public AzureBlobStorageHelper()
         {
             _blobServiceClient = new BlobServiceClient(new Uri(blobSasUrl));
@@ -24,12 +21,16 @@ namespace BoyumFoosballStats.Controller
 
         public async Task<List<T>> UploadList<T>(List<T> entries, string fileName, bool overwrite = false)
         {
+#if DEBUG
+            fileName = DEBUG_DefaultMatchesFileName;
+#endif
             var entriesToUpload = new List<T>();
             BlobClient blobClient = GetBlobClient(containerName, fileName);
             if (!overwrite)
             {
                 entriesToUpload.AddRange(await GetEntries<T>(fileName));
             }
+
             entriesToUpload.AddRange(entries);
             var localFilePath = $"./{fileName}";
             var json = JsonSerializer.Serialize(entriesToUpload);
@@ -52,8 +53,8 @@ namespace BoyumFoosballStats.Controller
                     return entries;
                 }
             }
-            return new List<T>();
 
+            return new List<T>();
         }
 
         public async Task<List<T>> RemoveEntry<T>(T entry, string fileName)

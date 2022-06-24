@@ -11,8 +11,8 @@ namespace BoyumFoosballStats.Model
         public int MatchesPlayed { get; set; }
         public int Wins { get; set; }
         public int Losses{ get; set; }
-        public int CurrentWinningStreak{ get; set; }
-        public int CurrentLosingStreak{ get; set; }
+        public int ActiveWinningStreak{ get; set; }
+        public int ActiveLosingStreak{ get; set; }
         public int HIghestWinningStreak { get; set; }
         public int HIghestLosingStreak { get; set; }
         [JsonIgnore] public int GoalDifference => GoalsScored - GoalsAgainst;

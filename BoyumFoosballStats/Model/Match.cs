@@ -51,6 +51,10 @@ namespace BoyumFoosballStats.Model
             return Gray.Players.Any(x => x == player) || Black.Players.Any(x => x == player);
         }
 
+        public Team? GetPlayerTeam(Player player)
+        {
+            return Black.Players.Contains(player) ? Black : Gray.Players.Contains(player) ? Gray : null;
+        }
 
         public bool WasPlayerDefenderInMatch(Player player)
         {
@@ -64,7 +68,7 @@ namespace BoyumFoosballStats.Model
         }
 
         public TableSide WinningSide => ScoreBlack > ScoreGray ? TableSide.Black : TableSide.Gray;
-        
+
         public TableSide LosingSide => ScoreBlack > ScoreGray ? TableSide.Gray : TableSide.Black;
 
         public bool IsValid()

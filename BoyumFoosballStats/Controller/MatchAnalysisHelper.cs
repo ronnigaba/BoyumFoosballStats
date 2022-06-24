@@ -27,6 +27,24 @@ namespace BoyumFoosballStats.Controller
             }
             return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player, position) * 100);
         }
+        
+        public double CalculateLossRate(List<Match> matches, Player player, PlayerPosition? position = null)
+        {
+            int losses;
+            switch (position)
+            {
+                case PlayerPosition.Attacker:
+                    losses = matches.Count(x => x.LosingTeam.Attacker == player);
+                    break;
+                case PlayerPosition.Defender:
+                    losses = matches.Count(x => x.LosingTeam.Defender == player);
+                    break;
+                default:
+                    losses = matches.Count(x => x.LosingTeam.Players.Contains(player));
+                    break;
+            }
+            return Math.Round(losses / (float)CalculateMatchesPlayed(matches, player, position) * 100);
+        }
 
         public int CalculateMatchesPlayed(List<Match> matches, Player player, PlayerPosition? position = null)
         {
@@ -56,6 +74,11 @@ namespace BoyumFoosballStats.Controller
         {
             var wins = matches.Count(x => x.WinningTeam.Players.Contains(attacker) && x.WinningTeam.Players.Contains(defender));
             return Math.Round(wins / (float)CalculateMatchesPlayed(matches, attacker, defender, ignorePosition) * 100);
+        }
+        public double CalculateLossRateTeam(List<Match> matches, Player attacker, Player defender, bool ignorePosition = true)
+        {
+            var losses = matches.Count(x => x.LosingTeam.Players.Contains(attacker) && x.LosingTeam.Players.Contains(defender));
+            return Math.Round(losses / (float)CalculateMatchesPlayed(matches, attacker, defender, ignorePosition) * 100);
         }
 
         public IOrderedEnumerable<KeyValuePair<string, double>> CalculateWinRatesForAllTeams(List<Match> matches, bool ignorePositions = true)

@@ -7,82 +7,54 @@ namespace BoyumFoosballStats.Viewmodel
 {
     public class PlayerDashboardViewModel : IPlayerDashboardViewModel
     {
-        public List<Match> Matches { get; set; } = new List<Match>();
+        public List<Match> Matches { get; set; } = new();
         public AzureBlobStorageHelper blobHelper { get; set; }
-        public MatchAnalysisHelper analysisHelper { get; set; }
+        private PlayerStatisticsController _playerStatisticsController { get; set; } = new();
         public IEnumerable<Player> PlayerFilterOption { get; set; }
-        public Dictionary<string, double>? WeeklyWinRates { get; set; } = new();
-        public Dictionary<string, int>? WeeklyMatchesPlayed { get; set; } = new();
-        public Dictionary<string, double>? WinRatesByTeammate { get; set; } = new();
-        private IOrderedEnumerable<IGrouping<string, Match>> MatchesByDate { get; set; }
+        private Dictionary<Player, PlayerStatistics> PlayerStatisticsCache { get; set; } = new();
+        public PlayerStatistics? CurrentPlayerStats { get; set; }
+        public string IdealMatchAdvice { get; set; }
+        public Dictionary<string, double> WinRateByTeammate { get; set; } = new();
+        public Dictionary<string, double> WinRateByOpponent { get; set; } = new();
+        public Dictionary<string, double> WinRateByWeekday { get; set; } = new();
 
         public void CalculateStats(object value)
         {
-            CalculateWinRatesByTeammate(value);
-            CalculateWeeklyStats(value);
-        }
-
-        private void CalculateWeeklyStats(object value)
-        {
-            if (MatchesByDate == null || !MatchesByDate.Any())
-            {
-                MatchesByDate = analysisHelper.SortMatchesByWeek(Matches).TakeLast(5).OrderBy(x => x.Key);
-            }
-
             var player = (Player)value;
-            var weeklyWinRates = new Dictionary<string, double>();
-            var weeklyMatchesPlayed = new Dictionary<string, int>();
-            foreach (var group in MatchesByDate)
+            if (PlayerStatisticsCache.TryGetValue(player, out var cachedPlayerStats))
             {
-                var week = $"{@group.Key}";
-                var matches = group.ToList();
-                var winRate = analysisHelper.CalculateWinRate(matches, player);
-                if (!double.IsNaN(winRate))
-                {
-                    weeklyWinRates.Add(week, winRate);
-                }
-
-                weeklyMatchesPlayed.Add(week, analysisHelper.CalculateMatchesPlayed(matches, player));
+                CurrentPlayerStats = cachedPlayerStats;
             }
 
-            WeeklyWinRates = weeklyWinRates.Any() ? weeklyWinRates : null;
-            WeeklyMatchesPlayed = weeklyMatchesPlayed.Any() ? weeklyMatchesPlayed : null;
+            CurrentPlayerStats = _playerStatisticsController.CalculatePlayerStatistics(Matches, player);
+            FormateData(CurrentPlayerStats);
         }
 
-        private void CalculateWinRatesByTeammate(object value)
+        private void FormateData(PlayerStatistics playerStats)
         {
-            var currentPlayer = (Player)value;
-            var winRatesByTeammate = new Dictionary<string, double>();
-            foreach (var teammate in (Player[])Enum.GetValues(typeof(Player)))
-            {
-                if (currentPlayer == teammate)
-                {
-                    continue;
-                }
-
-                var winRate = analysisHelper.CalculateWinRateTeam(Matches, currentPlayer, teammate);
-                if (double.IsNaN(winRate))
-                {
-                    continue;
-                }
-
-                winRatesByTeammate.Add(Enum.GetName(teammate)!, winRate);
-            }
-            WinRatesByTeammate = winRatesByTeammate.Any() ? winRatesByTeammate : null;
+            var players = Enum.GetNames<Player>();
+            var weekdays = Enum.GetNames<DayOfWeek>();
+            WinRateByTeammate = playerStats.WinRateByTeammate.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Value).ToDictionary(x => players[(int)x.Key], x => x.Value);
+            WinRateByOpponent = playerStats.WinRateByOpponent.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Value).ToDictionary(x => players[(int)x.Key], x => x.Value);
+            WinRateByWeekday = playerStats.WinRateByWeekday.Where(x=>!double.IsNaN(x.Value)).OrderBy(x => x.Key).ToDictionary(x => weekdays[(int)x.Key], x => x.Value);
+            
+            var idealOpponents = playerStats.WinRateByOpponent.OrderByDescending(x => x.Value).Take(2).ToList();
+            IdealMatchAdvice = $"The ideal match for {playerStats.Player} is played on a {playerStats.WinRateByWeekday.MaxBy(x=>x.Value).Key} " +
+                               $"with teammate {playerStats.WinRateByTeammate.MaxBy(x=>x.Value).Key} against {idealOpponents.First().Key} and {idealOpponents.Last().Key}";
         }
     }
 
     public interface IPlayerDashboardViewModel
     {
+        Dictionary<string, double> WinRateByTeammate { get; set; }
+        public Dictionary<string, double> WinRateByOpponent { get; set; }
+        public Dictionary<string, double> WinRateByWeekday { get; set; }
         List<Match> Matches { get; set; }
         AzureBlobStorageHelper blobHelper { get; set; }
-        MatchAnalysisHelper analysisHelper { get; set; }
 
         IEnumerable<Player> PlayerFilterOption { get; set; }
-        public Dictionary<string, double> WeeklyWinRates { get; set; }
-        public Dictionary<string, int> WeeklyMatchesPlayed { get; set; }
-        public Dictionary<string, double> WinRatesByTeammate { get; set; }
-
+        PlayerStatistics? CurrentPlayerStats { get; set; }
+        string IdealMatchAdvice { get; set; }
         void CalculateStats(object value);
     }
 }

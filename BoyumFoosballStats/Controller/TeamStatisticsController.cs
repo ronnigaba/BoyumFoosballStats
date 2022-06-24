@@ -1,5 +1,4 @@
 ﻿using BoyumFoosballStats.Model;
-using BoyumFoosballStats.Model.Enums;
 
 namespace BoyumFoosballStats.Controller
 {
@@ -9,82 +8,53 @@ namespace BoyumFoosballStats.Controller
 
         public List<TeamStatistics> CalculateTeamStats(List<Match> matches, int kFactor = 15)
         {
-            var eloRatings = new List<TeamStatistics>();
+            var teamStats = new List<TeamStatistics>();
 
             foreach (var match in matches)
             {
-                var losingIdentifier = match.LosingTeam.TeamIdentifier;
-                var losingTeamStats = eloRatings.SingleOrDefault(x => x.TeamIdentifier == losingIdentifier);
-                var losingElo = losingTeamStats?.EloRating ?? 0;
                 var winningIdentifier = match.WinningTeam.TeamIdentifier;
-                var winningTeamStats = eloRatings.SingleOrDefault(x => x.TeamIdentifier == winningIdentifier);
+                var winningTeamStats = teamStats.SingleOrDefault(x => x.TeamIdentifier == winningIdentifier);
+                var losingIdentifier = match.LosingTeam.TeamIdentifier;
+                var losingTeamStats = teamStats.SingleOrDefault(x => x.TeamIdentifier == losingIdentifier);
                 var winningElo = winningTeamStats?.EloRating ?? 0;
+                var losingElo = losingTeamStats?.EloRating ?? 0;
 
                 var newElo = _eloController.CalculateElo(winningElo, losingElo, (decimal)EloController.WIN, (decimal)EloController.LOSE, kFactor);
                 if (winningTeamStats == null)
                 {
-                    eloRatings.Add(new TeamStatistics { TeamIdentifier = winningIdentifier });
-                    winningTeamStats = eloRatings.Single(x => x.TeamIdentifier == winningIdentifier);
+                    teamStats.Add(new TeamStatistics { TeamIdentifier = winningIdentifier });
+                    winningTeamStats = teamStats.Single(x => x.TeamIdentifier == winningIdentifier);
                 }
                 winningTeamStats.EloRating = newElo[0];
                 winningTeamStats.GoalsScored += match.WinningScore;
                 winningTeamStats.GoalsAgainst += match.LosingScore;
                 winningTeamStats.MatchesPlayed++;
                 winningTeamStats.Wins++;
-                winningTeamStats.CurrentWinningStreak++;
-                winningTeamStats.CurrentLosingStreak = 0;
-                winningTeamStats.HIghestWinningStreak = winningTeamStats.CurrentWinningStreak > winningTeamStats.HIghestWinningStreak
-                    ? winningTeamStats.CurrentWinningStreak
+                winningTeamStats.ActiveWinningStreak++;
+                winningTeamStats.ActiveLosingStreak = 0;
+                winningTeamStats.HIghestWinningStreak = winningTeamStats.ActiveWinningStreak > winningTeamStats.HIghestWinningStreak
+                    ? winningTeamStats.ActiveWinningStreak
                     : winningTeamStats.HIghestWinningStreak;
 
 
                 if (losingTeamStats == null)
                 {
-                    eloRatings.Add(new TeamStatistics { TeamIdentifier = losingIdentifier });
-                    losingTeamStats = eloRatings.Single(x => x.TeamIdentifier == losingIdentifier);
+                    teamStats.Add(new TeamStatistics { TeamIdentifier = losingIdentifier });
+                    losingTeamStats = teamStats.Single(x => x.TeamIdentifier == losingIdentifier);
                 }
                 losingTeamStats.EloRating = newElo[1];
                 losingTeamStats.GoalsScored += match.LosingScore;
                 losingTeamStats.GoalsAgainst += match.WinningScore;
                 losingTeamStats.MatchesPlayed++;
                 losingTeamStats.Losses++;
-                losingTeamStats.CurrentLosingStreak++;
-                losingTeamStats.CurrentWinningStreak = 0;
-                losingTeamStats.HIghestLosingStreak = losingTeamStats.CurrentLosingStreak > losingTeamStats.HIghestLosingStreak
-                    ? losingTeamStats.CurrentLosingStreak
+                losingTeamStats.ActiveLosingStreak++;
+                losingTeamStats.ActiveWinningStreak = 0;
+                losingTeamStats.HIghestLosingStreak = losingTeamStats.ActiveLosingStreak > losingTeamStats.HIghestLosingStreak
+                    ? losingTeamStats.ActiveLosingStreak
                     : losingTeamStats.HIghestLosingStreak;
             }
 
-            return eloRatings;
-        }
-
-        public double CalculateEloAccuracy(List<Match> matches, List<TeamStatistics>? teamStats = null, int kFactor = 15)
-        {
-            int unexpectedWins = 0;
-            int expectedWins = 0;
-            if (teamStats == null)
-            {
-                teamStats = CalculateTeamStats(matches, kFactor);
-            }
-            foreach (var match in matches)
-            {
-                var losingRating = teamStats.SingleOrDefault(x => x.TeamIdentifier == match.LosingTeam.TeamIdentifier);
-                var losingElo = losingRating?.EloRating ?? 0;
-                var winningRating = teamStats.SingleOrDefault(x => x.TeamIdentifier == match.WinningTeam.TeamIdentifier);
-                var winningElo = winningRating?.EloRating ?? 0;
-                var prediction = _eloController.PredictResult(winningElo, losingElo);
-                if (prediction[0] > prediction[1])
-                {
-                    expectedWins++;
-                }
-                else
-                {
-                    unexpectedWins++;
-                }
-            }
-
-            var accuracy = (double)expectedWins / matches.Count * 100;
-            return accuracy;
+            return teamStats;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace BoyumFoosballStats.Model
         public int Losses{ get; set; }
         public int ActiveWinningStreak{ get; set; }
         public int ActiveLosingStreak{ get; set; }
-        public int HIghestWinningStreak { get; set; }
-        public int HIghestLosingStreak { get; set; }
+        public int HighestWinningStreak { get; set; }
+        public int HighestLosingStreak { get; set; }
         [JsonIgnore] public int GoalDifference => GoalsScored - GoalsAgainst;
         [JsonIgnore] public double WinRate => (double)Wins / MatchesPlayed * 100;
         [JsonIgnore] public string Attacker => TeamIdentifier.Split(' ').First();

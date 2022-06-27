@@ -32,9 +32,9 @@ namespace BoyumFoosballStats.Controller
                 winningTeamStats.Wins++;
                 winningTeamStats.ActiveWinningStreak++;
                 winningTeamStats.ActiveLosingStreak = 0;
-                winningTeamStats.HIghestWinningStreak = winningTeamStats.ActiveWinningStreak > winningTeamStats.HIghestWinningStreak
+                winningTeamStats.HighestWinningStreak = winningTeamStats.ActiveWinningStreak > winningTeamStats.HighestWinningStreak
                     ? winningTeamStats.ActiveWinningStreak
-                    : winningTeamStats.HIghestWinningStreak;
+                    : winningTeamStats.HighestWinningStreak;
 
 
                 if (losingTeamStats == null)
@@ -49,9 +49,9 @@ namespace BoyumFoosballStats.Controller
                 losingTeamStats.Losses++;
                 losingTeamStats.ActiveLosingStreak++;
                 losingTeamStats.ActiveWinningStreak = 0;
-                losingTeamStats.HIghestLosingStreak = losingTeamStats.ActiveLosingStreak > losingTeamStats.HIghestLosingStreak
+                losingTeamStats.HighestLosingStreak = losingTeamStats.ActiveLosingStreak > losingTeamStats.HighestLosingStreak
                     ? losingTeamStats.ActiveLosingStreak
-                    : losingTeamStats.HIghestLosingStreak;
+                    : losingTeamStats.HighestLosingStreak;
             }
 
             return teamStats;

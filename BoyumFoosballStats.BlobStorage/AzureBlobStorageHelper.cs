@@ -7,10 +7,13 @@ namespace BoyumFoosballStats.Controller
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-        public static string DEBUG_DefaultMatchesFileName = "matches_debug.json";
+#if DEBUG
+        public static string DefaultMatchesFileName = "matches_debug.json";
+        public static string DefaultEloFileName = "elo_debug.json";
+#else
         public static string DefaultMatchesFileName = "matches.json";
         public static string DefaultEloFileName = "elo.json";
-
+#endif
         private readonly string blobSasUrl =
             "https://boyumfoosballstorage.blob.core.windows.net/foosballmatches?sp=racwdli&st=2021-11-11T19:06:13Z&se=2099-11-12T03:06:13Z&sv=2020-08-04&sr=c&sig=d%2Fa9iPG41lR54QcBwi1Cy16PVfUac7D2oPTi4ZDQVC0%3D";
 
@@ -21,9 +24,6 @@ namespace BoyumFoosballStats.Controller
 
         public async Task<List<T>> UploadList<T>(List<T> entries, string fileName, bool overwrite = false)
         {
-#if DEBUG
-            fileName = DEBUG_DefaultMatchesFileName;
-#endif
             var entriesToUpload = new List<T>();
             BlobClient blobClient = GetBlobClient(containerName, fileName);
             if (!overwrite)

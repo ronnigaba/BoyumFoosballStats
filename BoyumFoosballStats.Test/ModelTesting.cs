@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using BoyumFoosballStats.Ai;
+using BoyumFoosballStats.Ai.Controller;
 using BoyumFoosballStats.Controller;
 using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
@@ -24,7 +26,28 @@ public class UnitTest1
     }
 
     [Fact]
-    public async void GenerateTrainingData()
+    public async void TrainCustomModel()
+    {
+        var blobHelper = new AzureBlobStorageHelper();
+        var matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
+        var predictionMatches = matches.Select(x => new MatchOutcomeModel.ModelInput
+        {
+            GrayDefender = (float)x.Gray.Defender,
+            GrayAttacker = (float)x.Gray.Attacker,
+            BlackDefender = (float)x.Black.Defender,
+            BlackAttacker = (float)x.Black.Attacker,
+            Winner = (int)x.WinningSide
+        });
+        var test = new AiModelController<MatchOutcomeModel.ModelInput, MatchOutcomeModel.ModelOutput>();
+        await using (Stream stream = new MemoryStream())
+        {
+            var result = test.Train(predictionMatches, nameof(MatchOutcomeModel.ModelInput.Winner), 300, stream);
+            await blobHelper.UploadFileStream("MatchOutcomeModel.zip", stream, true);
+        }
+    }
+
+    [Fact]
+    public async void GenerateTrainingData_Csv()
     {
         var blobHelper = new AzureBlobStorageHelper();
         var matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);

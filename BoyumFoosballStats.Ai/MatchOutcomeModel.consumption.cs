@@ -46,10 +46,12 @@ namespace BoyumFoosballStats_Ai
 
         public PredictionEngine<ModelInput, ModelOutput>? PredictEngine;
 
-        public MatchOutcomeModel()
+        public MatchOutcomeModel(string modelFileName = "MatchOutcomeModel.zip")
         {
-            CreatePredictEngine();
+            ModelFileName = modelFileName;
         }
+
+        public string ModelFileName { get; set; }
 
         /// <summary>
         /// Use this method to predict on <see cref="ModelInput"/>.
@@ -61,16 +63,16 @@ namespace BoyumFoosballStats_Ai
         {
             if (PredictEngine == null)
             {
-                await CreatePredictEngine();
+                await CreatePredictEngine(ModelFileName);
             }
             return PredictEngine!.Predict(input);
         }
 
-        private async Task CreatePredictEngine()
+        private async Task CreatePredictEngine(string modelFileName)
         {
             var mlContext = new MLContext();
             var blobStorageController = new AzureBlobStorageHelper();
-            var stream = await blobStorageController.GetFileStream("MatchOutcomeModel.zip");
+            var stream = await blobStorageController.GetFileStream(modelFileName);
             if (_mlModel == null)
             {
                 _mlModel = mlContext.Model.Load(stream, out var _);

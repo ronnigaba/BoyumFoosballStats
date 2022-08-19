@@ -77,6 +77,7 @@ public class UnitTest1
         return Enum.GetValues<Player>()[randomizer.NextInt64(0, 8)];
     }
     
+    //Tests agreement between the AI and ELO models when presented with a number of randomized matches
     [Fact]
     public async void MatchPredictionTest()
     {
@@ -86,7 +87,7 @@ public class UnitTest1
         var teamStats = new TeamStatisticsController().CalculateTeamStats(matches);
         var outcomeModel = new MatchOutcomeModel();
         var eloController = new EloController();
-        for (int i = 0; i < 100000; i++)
+        for (int i = 0; i < 1000000; i++)
         {
 
             var match = new Match();
@@ -126,7 +127,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public async void TestAccuraccyAgainstExistingMatches_Elo()
+    public async void TestAccuracyAgainstExistingMatches_Elo()
     {
         var blobHelper = new AzureBlobStorageHelper();
         var matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
@@ -154,7 +155,7 @@ public class UnitTest1
         var accuracy = (double)expectedWins / matches.Count * 100;
     }
     [Fact]
-    public async void TestAccuraccyAgainstExistingMatches_Ai()
+    public async void TestAccuracyAgainstExistingMatches_Ai()
     {
         var blobHelper = new AzureBlobStorageHelper();
         var matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
@@ -185,4 +186,53 @@ public class UnitTest1
 
         var accuracy = (double)expectedWins / matches.Count * 100;
     }
+
+    [Fact]
+    public async void TestAccuracyAgainstExistingMatches_Ai_OldVsNew()
+    {
+        var blobHelper = new AzureBlobStorageHelper();
+        var matches = await blobHelper.GetEntries<Match>(AzureBlobStorageHelper.DefaultMatchesFileName);
+        var outcomeModelNew = new MatchOutcomeModel();
+        var outcomeModelOld = new MatchOutcomeModel("MatchOutcomeModel_old.zip");
+        int unexpectedWinsNew = 0;
+        int unexpectedWinsOld = 0;
+        int expectedWinsNew = 0;
+        int expectedWinsOld = 0;
+        foreach (var match in matches)
+        {
+            //Load sample data
+            var sampleData = new MatchOutcomeModel.ModelInput
+            {
+                GrayDefender = (float)match.Gray.Defender,
+                GrayAttacker = (float)match.Gray.Attacker,
+                BlackDefender = (float)match.Black.Defender,
+                BlackAttacker = (float)match.Black.Attacker,
+            };
+            var newResult = await outcomeModelNew.Predict(sampleData);
+            var aiPredictedWinner = newResult.Score > 0.5 ? TableSide.Gray : TableSide.Black;
+            if (aiPredictedWinner == match.WinningSide)
+            {
+                expectedWinsNew++;
+            }
+            else
+            {
+                unexpectedWinsNew++;
+            }
+            var oldResult = await outcomeModelOld.Predict(sampleData);
+            var oldAiPredictedWinner = oldResult.Score > 0.5 ? TableSide.Gray : TableSide.Black;
+            if (oldAiPredictedWinner == match.WinningSide)
+            {
+                expectedWinsOld++;
+            }
+            else
+            {
+                unexpectedWinsOld++;
+            }
+        }
+
+        var accuracyNew = (double)expectedWinsNew / matches.Count * 100;
+        var accuracyOld = (double)expectedWinsOld / matches.Count * 100;
+    }
+
+
 }

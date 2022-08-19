@@ -8,7 +8,7 @@ namespace BoyumFoosballStats.Controller
     {
         private readonly string containerName = "foosballmatches";
         private readonly BlobServiceClient _blobServiceClient;
-#if !DEBUG
+#if DEBUG
         public static string DefaultMatchesFileName = "matches_debug.json";
         public static string DefaultEloFileName = "elo_debug.json";
 #else

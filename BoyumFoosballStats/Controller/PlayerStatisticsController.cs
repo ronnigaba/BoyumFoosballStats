@@ -45,6 +45,7 @@ public class PlayerStatisticsController
 
         foreach (var side in Enum.GetValues<TableSide>())
         {
+            playerStats.WinRateBySide.Add(side, _matchAnalysisHelper.CalculateWinRate(matches, player, null, side));
             foreach (var position in Enum.GetValues<PlayerPosition>())
             {
                 playerStats.WinRateByPosition.Add(side.ToString() + position, _matchAnalysisHelper.CalculateWinRate(matches, player, position, side));

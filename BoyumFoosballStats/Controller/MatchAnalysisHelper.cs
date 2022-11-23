@@ -38,7 +38,7 @@ namespace BoyumFoosballStats.Controller
                     wins = matches.Count(x => x.WinningTeam.Players.Contains(player)  && sides.Contains(x.WinningTeam.Side));
                     break;
             }
-            return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player, position) * 100);
+            return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player, position, side) * 100);
         }
         
         public double CalculateLossRate(List<Match> matches, Player player, PlayerPosition? position = null)
@@ -59,8 +59,17 @@ namespace BoyumFoosballStats.Controller
             return Math.Round(losses / (float)CalculateMatchesPlayed(matches, player, position) * 100);
         }
 
-        public int CalculateMatchesPlayed(List<Match> matches, Player player, PlayerPosition? position = null)
+        public int CalculateMatchesPlayed(List<Match> matches, Player player, PlayerPosition? position = null, TableSide? side = null)
         {
+            switch (side)
+            {
+                case TableSide.Black:
+                    matches = matches.Where(x => x.Black.Players.Contains(player)).ToList();
+                    break;
+                case TableSide.Gray:
+                    matches = matches.Where(x => x.Gray.Players.Contains(player)).ToList();
+                    break;
+            }
             switch (position)
             {
                 case PlayerPosition.Attacker:

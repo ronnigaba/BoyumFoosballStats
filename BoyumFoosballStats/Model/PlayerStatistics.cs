@@ -12,6 +12,7 @@ public class PlayerStatistics
     public Dictionary<Player, double> LossRateByOpponent { get; set; } = new();
 
     public Dictionary<string, double> WinRateByPosition{ get; set; } = new();
+    public Dictionary<TableSide, double> WinRateBySide{ get; set; } = new();
 
     public Dictionary<string, double> WeeklyWinRates { get; set; } = new();
     public Dictionary<string, int> WeeklyMatchesPlayed { get; set; } = new();

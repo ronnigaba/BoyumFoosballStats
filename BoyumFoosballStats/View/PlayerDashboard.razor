@@ -82,6 +82,16 @@
                     </RadzenChart>
                 </div>
             }
+            @if (_viewModel.WinRateBySide.Any())
+            {
+                <div class="col-sm-12 col-md-6">
+                    <RadzenChart>
+                        <RadzenColumnSeries Data="@_viewModel.WinRateBySide" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by side(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                </div>
+            }
         }
     </div>
 </div>

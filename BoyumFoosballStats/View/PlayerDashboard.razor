@@ -19,13 +19,13 @@
                 <div class="col-sm-12 col-md-4">
                     <RadzenChart>
                         <RadzenLineSeries Data="@_viewModel.CurrentPlayerStats.WeeklyWinRates.Where(x => !double.IsNaN(x.Value))" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by week (%)">
-                            <RadzenMarkers MarkerType="MarkerType.Diamond"/>
+                            <RadzenMarkers MarkerType="MarkerType.Diamond" />
                         </RadzenLineSeries>
-                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenLegend Position="LegendPosition.Bottom" />
                         <RadzenValueAxis Min="0" Step="5">
-                            <RadzenGridLines Visible="true"/>
+                            <RadzenGridLines Visible="true" />
                         </RadzenValueAxis>
-                        <RadzenCategoryAxis Padding="20"/>
+                        <RadzenCategoryAxis Padding="20" />
                     </RadzenChart>
                 </div>
             }
@@ -34,11 +34,11 @@
                 <div class="col-sm-12 col-md-4">
                     <RadzenChart>
                         <RadzenLineSeries Data="@_viewModel.CurrentPlayerStats.WeeklyMatchesPlayed.Where(x => !double.IsNaN(x.Value))" CategoryProperty="Key" ValueProperty="Value" Title="Matches played by week">
-                            <RadzenMarkers MarkerType="MarkerType.Diamond"/>
+                            <RadzenMarkers MarkerType="MarkerType.Diamond" />
                         </RadzenLineSeries>
-                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenLegend Position="LegendPosition.Bottom" />
                         <RadzenValueAxis Min="0">
-                            <RadzenGridLines Visible="true"/>
+                            <RadzenGridLines Visible="true" />
                         </RadzenValueAxis>
                     </RadzenChart>
                 </div>
@@ -47,8 +47,8 @@
             {
                 <div class="col-sm-12 col-md-4">
                     <RadzenChart>
-                        <RadzenColumnSeries Data="@_viewModel.WinRateByWeekday" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by weekday(%)"/>
-                        <RadzenLegend Position="LegendPosition.Bottom"/>
+                        <RadzenColumnSeries Data="@_viewModel.WinRateByWeekday" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by weekday(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
                     </RadzenChart>
                 </div>
             }
@@ -56,9 +56,9 @@
             {
                 <div class="col-sm-12 col-md-6">
                     <RadzenChart>
-                        <RadzenBarSeries Data="@_viewModel.WinRateByTeammate" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by teammate(%)"/>
-                        <RadzenLegend Position="LegendPosition.Bottom"/>
-                        <RadzenValueAxis Min="0" Step="5"/>
+                        <RadzenBarSeries Data="@_viewModel.WinRateByTeammate" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by teammate(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
                     </RadzenChart>
                 </div>
             }
@@ -66,9 +66,19 @@
             {
                 <div class="col-sm-12 col-md-6">
                     <RadzenChart>
-                        <RadzenBarSeries Data="@_viewModel.WinRateByOpponent" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by opponent(%)"/>
-                        <RadzenLegend Position="LegendPosition.Bottom"/>
-                        <RadzenValueAxis Min="0" Step="5"/>
+                        <RadzenBarSeries Data="@_viewModel.WinRateByOpponent" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by opponent(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
+                    </RadzenChart>
+                </div>
+            }
+            @if (_viewModel.WinRateByPosition.Any())
+            {
+                <div class="col-sm-12 col-md-6">
+                    <RadzenChart>
+                        <RadzenColumnSeries Data="@_viewModel.WinRateByPosition" CategoryProperty="Key" ValueProperty="Value" Title="Win rate by position(%)" />
+                        <RadzenLegend Position="LegendPosition.Bottom" />
+                        <RadzenValueAxis Min="0" Step="5" />
                     </RadzenChart>
                 </div>
             }

@@ -34,7 +34,7 @@ namespace BoyumFoosballStats.Functions
             var test = new AiModelController<MatchOutcomeModel.ModelInput, MatchOutcomeModel.ModelOutput>();
             await using (Stream stream = new MemoryStream())
             {
-                var result = test.Train(predictionMatches, nameof(MatchOutcomeModel.ModelInput.Winner), 300, stream);
+                var result = test.Train(predictionMatches, nameof(MatchOutcomeModel.ModelInput.Winner), 250, stream);
                 //Backup the old model
                 var oldModel = await blobHelper.GetFileStream("MatchOutcomeModel.zip");
                 if (oldModel != null)

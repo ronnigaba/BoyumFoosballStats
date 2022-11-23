@@ -1,5 +1,6 @@
 ﻿using BoyumFoosballStats.Model;
 using BoyumFoosballStats.Model.Enums;
+using Tensorflow;
 
 namespace BoyumFoosballStats.Controller
 {
@@ -10,19 +11,31 @@ namespace BoyumFoosballStats.Controller
             return CalculateMatchesPlayed(matches, player, position) > 0;
         }
 
-        public double CalculateWinRate(List<Match> matches, Player player, PlayerPosition? position = null)
+        public double CalculateWinRate(List<Match> matches, Player player, PlayerPosition? position = null, TableSide? side = null)
         {
+            var sides = new List<TableSide>();
+            if (side == null)
+            {
+                sides.Add(TableSide.Black);
+                sides.Add(TableSide.Gray);
+            }
+            else
+            {
+                sides.Add(side.Value);
+            }
+
+
             int wins;
             switch (position)
             {
                 case PlayerPosition.Attacker:
-                    wins = matches.Count(x => x.WinningTeam.Attacker == player);
+                    wins = matches.Count(x => x.WinningTeam.Attacker == player && sides.Contains(x.WinningTeam.Side));
                     break;
                 case PlayerPosition.Defender:
-                    wins = matches.Count(x => x.WinningTeam.Defender == player);
+                    wins = matches.Count(x => x.WinningTeam.Defender == player  && sides.Contains(x.WinningTeam.Side));
                     break;
                 default:
-                    wins = matches.Count(x => x.WinningTeam.Players.Contains(player));
+                    wins = matches.Count(x => x.WinningTeam.Players.Contains(player)  && sides.Contains(x.WinningTeam.Side));
                     break;
             }
             return Math.Round(wins / (float)CalculateMatchesPlayed(matches, player, position) * 100);

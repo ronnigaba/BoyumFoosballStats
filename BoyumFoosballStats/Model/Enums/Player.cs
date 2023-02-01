@@ -19,6 +19,7 @@
         Andrei = 14,
         Mads = 15,
         Rasmus = 16,
-        David = 17
+        David = 17,
+        Khaled = 18
     }
 }

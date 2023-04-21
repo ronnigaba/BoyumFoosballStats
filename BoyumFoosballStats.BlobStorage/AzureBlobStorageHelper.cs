@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace BoyumFoosballStats.Controller
 {
@@ -76,6 +77,21 @@ namespace BoyumFoosballStats.Controller
             }
 
             return null;
+        }
+
+        public async Task UploadFileStream(string fileName, Stream stream, bool overwrite = false)
+        {
+            BlobClient blobClient = GetBlobClient(containerName, fileName);
+
+            if (!overwrite)
+            {
+                BlobClient backupBlobClient = GetBlobClient(containerName, $"{fileName}_old");
+                var oldFile = await GetFileStream(fileName);
+                await backupBlobClient.UploadAsync(oldFile);
+            }
+            await stream.FlushAsync();
+            stream.Position = 0;
+            await blobClient.UploadAsync(stream, true);
         }
 
         private BlobClient GetBlobClient(string containerName, string fileName)

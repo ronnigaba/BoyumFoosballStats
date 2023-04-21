@@ -42,7 +42,16 @@ public class PlayerStatisticsController
         var weeklyStats = CalculateWeeklyStats(matches, player);
         playerStats.WeeklyWinRates = weeklyStats.WeeklyWinRates;
         playerStats.WeeklyMatchesPlayed = weeklyStats.WeeklyMatchesPlayed;
-        
+
+        foreach (var side in Enum.GetValues<TableSide>())
+        {
+            playerStats.WinRateBySide.Add(side, _matchAnalysisHelper.CalculateWinRate(matches, player, null, side));
+            foreach (var position in Enum.GetValues<PlayerPosition>())
+            {
+                playerStats.WinRateByPosition.Add(side.ToString() + position, _matchAnalysisHelper.CalculateWinRate(matches, player, position, side));
+            }
+        }
+
         return playerStats;
     }
 
@@ -69,7 +78,7 @@ public class PlayerStatisticsController
     }
 
     //Experimental / WIP :p
-    public void CalculatePlayerRatingUsingAlgorhitm(List<Match> matches, List<TeamStatistics>? teamStats = null)
+    public void CalculatePlayerRatingUsingAlgorhytm(List<Match> matches, List<TeamStatistics>? teamStats = null)
     {
         if (teamStats == null)
         {

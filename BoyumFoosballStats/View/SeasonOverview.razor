@@ -86,7 +86,7 @@
             @if (_viewModel != null && _viewModel.TeamStatistics.Any())
             {
                 <p>Top win rates (5+ matches)</p>
-                <RadzenDataGrid Data="_viewModel.TeamStatistics.Where(x=>x.MatchesPlayed > 5).OrderByDescending(x=>x.WinRate).Take(3)" TItem="TeamStatistics">
+                <RadzenDataGrid Data="_viewModel.TeamStatistics.Where(x=>x.MatchesPlayed >= 5).OrderByDescending(x=>x.WinRate).Take(3)" TItem="TeamStatistics">
                     <Columns>
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="WinRateFormatted" Title="Win rate" />
                         <RadzenDataGridColumn TItem="TeamStatistics" Property="Attacker" Title="Attacker" />

@@ -18,7 +18,10 @@
         Adam = 13,
         Andrei = 14,
         Mads = 15,
-        Danjal = 16,
-        Tomas = 17
+        Rasmus = 16,
+        David = 17,
+        Khaled = 18,
+        Danjal = 19,
+        Tomas = 20
     }
 }

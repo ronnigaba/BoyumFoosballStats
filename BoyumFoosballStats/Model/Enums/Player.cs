@@ -17,6 +17,8 @@
         Paul = 12,
         Adam = 13,
         Andrei = 14,
-        Mads = 15
+        Mads = 15,
+        Danjal = 16,
+        Tomas = 17
     }
 }

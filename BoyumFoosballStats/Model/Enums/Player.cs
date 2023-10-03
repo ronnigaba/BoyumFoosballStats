@@ -21,6 +21,8 @@
         Rasmus = 16,
         David = 17,
         Khaled = 18,
-        Muhammad = 19
+        Danjal = 19,
+        Tomas = 20,
+        Muhammad = 21
     }
 }

@@ -115,7 +115,7 @@ public class UnitTest1
             //Load model and predict output
             var result = await outcomeModel.Predict(sampleData);
             var aiPredictedWinner = result.Score > 0.5 ? TableSide.Gray : TableSide.Black;
-            var blackChange = 100 - result.Score * 100;
+            var blackChance = 100 - result.Score * 100;
             var grayChance = 0 + result.Score * 100;
             
             var prediction = eloController.PredictResult(grayElo, blackElo);

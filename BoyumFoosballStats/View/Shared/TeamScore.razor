@@ -1,5 +1,5 @@
 ﻿@using BoyumFoosballStats.Model.Enums
-    @if (Team != null)
+@if (Team != null)
 {
     <div class="row">
         <div class="col-12 d-flex align-items-center">
@@ -21,9 +21,10 @@
 <p>Score</p>
 <div class="row">
     <div class="col-12 d-flex align-items-center">
-        <InputNumber @bind-Value="InternalScore" />
+        <InputNumber @bind-Value="InternalScore"/>
     </div>
 </div>
+
 @code
 {
     private string GetTeamName()
@@ -43,7 +44,7 @@
         }
     }
 
-    public List<Player> Players = Enum.GetValues<Player>().ToList();
+    public List<Player> Players = Enum.GetValues<Player>().OrderBy(x => x.ToString()).ToList();
 
     [Parameter]
     public Team? Team { get; set; }

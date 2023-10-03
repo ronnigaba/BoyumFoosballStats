@@ -10,7 +10,25 @@
                 .SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0),
                     (t1, t2) => t1.Concat(new T[] { t2 }));
         }
-        
-        //ToDo - GetAllCombinations
+
+        public static IEnumerable<IEnumerable<T>> GetAllCombinations<T>(IEnumerable<T> collection, int size)
+        {
+            if (size == 0)
+            {
+                yield return new T[0];
+            }
+            else
+            {
+                foreach (var item in collection)
+                {
+                    foreach (var combination in GetAllCombinations(collection, size - 1))
+                    {
+                        var currentCombination = new List<T> { item };
+                        currentCombination.AddRange(combination);
+                        yield return currentCombination;
+                    }
+                }
+            }
+        }
     }
 }
